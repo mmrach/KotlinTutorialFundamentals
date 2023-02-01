@@ -5,81 +5,82 @@ import java.util.*
 fun main(){
     //Variables()
     //Operators()
-    IfAndWhen()
+    //IfAndWhen()
+    Loops()
 }
 
 fun Variables(){
-//    // Kotlin var an val keywords
-//    //---------------------------------------------------
-//    var name="Kotlin" //mutable
-//    val myName="Miguel" //inmutable
-//    //Error   myName="Pepe"
-//    print("Hello $name")
-//    print("Cambiame de línea $name")
-//    print("Hello $myName")
-//
-////    return
-
-    //Initializing variables
+    // Kotlin var an val keywords
     //---------------------------------------------------
-//    val nombre
-//    nombre = "Miguel"
-//
-//    val miNombre:String
-//    miNombre = "Miguel"
-//
-//    val miNombre2:String = "Onofre"
-//
-//    println("Hola $miNombre $miNombre2")
+    var name="Kotlin" //mutable
+    val myName="Miguel" //inmutable
+    //Error   myName="Pepe"
+    print("Hello $name")
+    print("Cambiame de línea $name")
+    print("Hello $myName")
 
-//    //Intro to variable types Int and String
-//    //Basic Types in Kotlin
-//    //---------------------------------------------------
-//    val miNombre = "Miguel"
-//    val age: Int
-//    age= 21
-//    println("Hola mi nombre es $miNombre y tengo $age años")
-//
-//    //-------------------
-//    TiposNumericosBasicos()
-//
-//    val myByte: Byte
-//    myByte = -120 // -120   127   128 (error) -129 (error)
-//
-//    val myShort: Short
-//    myShort = 32345
-//
-////    println($myshort) // Error no está entre comillas.
-//    println(myShort)
-//
-//    //Long Values  'L'
-//    println("\n----------------------------------")
-//    println("Long")
-//    val myLong = 1L
-//    val myInt = 1
-//    println(myLong)
-//    println(myInt)
-//
-//    //Floating Type Numbers
-//    println("\n----------------------------------")
-//    println("Floating type numbers")
-//    val piInt = 3.14159265359  //por defecto los números con decimales son  Double
-//    val myPif = 3.14159265359f //Warning de precisión
-//    println(piInt)
-//    println(myPif)  //Salen menos decimales en consola. La precisión no es válida. Se redondea.
-//    //val myPif = 3.141592f //Ahora con f  o  F  es un Float
-//
-//    //-------------------------
-//    println("\n----------------------------------")
-//    println("Tipos Básicos")
-//    TiposTextoBasicos()
-//    TipoBoolean()
-//
-//    //Arrays
-//    println("\n----------------------------------")
-//    println("Arrays")
-//    val numbers: IntArray = intArrayOf(1, 2, 3, 4, 5)
-//    println("Value at 3rd position : " + numbers[2])
+//    return
+
+    //    Initializing variables
+    //    ---------------------------------------------------
+    //val nombre
+    //nombre = "Miguel"
+
+    val yo:String
+    yo = "Miguel"
+
+    val miNombre:String = "Onofre"
+
+    println("Hola $miNombre $miNombre")
+
+    //Intro to variable types Int and String
+    //Basic Types in Kotlin
+    //---------------------------------------------------
+    val miNombre2 = "Miguel"
+    val age: Int
+    age= 21
+    println("Hola mi nombre es $miNombre2 y tengo $age años")
+
+    //-------------------
+    TiposNumericosBasicos()
+
+    val myByte: Byte
+    myByte = -120 // -120   127   128 (error) -129 (error)
+
+    val myShort: Short
+    myShort = 32345
+
+//    println($myshort) // Error no está entre comillas.
+    println(myShort)
+
+    //Long Values  'L'
+    println("\n----------------------------------")
+    println("Long")
+    val myLong = 1L
+    val myInt = 1
+    println(myLong)
+    println(myInt)
+
+    //Floating Type Numbers
+    println("\n----------------------------------")
+    println("Floating type numbers")
+    val piInt = 3.14159265359  //por defecto los números con decimales son  Double
+    val myPif = 3.14159265359f //Warning de precisión
+    println(piInt)
+    println(myPif)  //Salen menos decimales en consola. La precisión no es válida. Se redondea.
+    //val myPif = 3.141592f //Ahora con f  o  F  es un Float
+
+    //-------------------------
+    println("\n----------------------------------")
+    println("Tipos Básicos")
+    TiposTextoBasicos()
+    TipoBoolean()
+
+    //Arrays
+    println("\n----------------------------------")
+    println("Arrays")
+    val numbers: IntArray = intArrayOf(1, 2, 3, 4, 5)
+    println("Value at 3rd position : " + numbers[2])
 
     DataTypeConversion()
 
@@ -362,7 +363,7 @@ fun IfAndWhen(){
     //Checking whether a given value is in a range or not using in operator
     println("\n----------------------------------")
     println("Checking whether a given value is in a range or not using in operator")
-    var dayOfMonth = 5
+    var dayOfMonth = 6
     when(dayOfMonth) {
         in 1..7 -> println("We're in the first Week of the Month")
         !in 15..21 -> println("We're not in the third week of the Month")
@@ -390,5 +391,90 @@ fun IfAndWhen(){
         number > 100 -> println("$number is greater than 100")
         else -> println("None of the above")
     }
+
+}
+
+fun Loops(){
+    println("\n----------------------------------")
+    println("Loops")
+    println("----------------------------------")
+
+    //While loop
+    println("\n----------------------------------")
+    println("While loop")
+    var x = 1
+    while(x <= 5) {
+        println("$x ")
+        x++
+    }
+
+    //do while loop
+    println("\n----------------------------------")
+    println("do while loop")
+    x = 1
+    do {
+        print("$x ")
+        x++
+    } while(x <= 5)
+
+    //do while loop: at least once execution
+    println("\n----------------------------------")
+    println("do while loop: at least once execution")
+    x = 6
+    do {
+        print("$x ")
+        x++
+    } while(x <= 5)
+
+    //Foor Loop: Iterating through a range
+    println("\n----------------------------------")
+    println("Foor Loop: Iterating through a range")
+    for(value in 1..10) {
+        print("$value ")
+    }
+
+    //Foor Loop: Iterating through an array
+    println("\n----------------------------------")
+    println("Foor Loop: Iterating through an array")
+    for(value in 1..10) {
+        print("$value ")
+    }
+
+    //Foor Loop: Iterating through an array using its indices
+    println("\n----------------------------------")
+    println("Foor Loop: Iterating through an array using its indices")
+    var primeNumbers = intArrayOf(2, 3, 5, 7, 11)
+    println(Arrays.toString(primeNumbers))
+
+    for(index in primeNumbers.indices) {
+        println("PrimeNumber(${index+1}): ${primeNumbers[index]}")
+    }
+
+    //Foor Loop: Iterating through an array using withIndex()
+    println("\n----------------------------------")
+    println("Foor Loop: Iterating through an array using withIndex()")
+    for((index, number) in primeNumbers.withIndex()) {
+        println("PrimeNumber(${index+1}): $number")
+    }
+
+    //Break and Continue
+    println("\n----------------------------------")
+    println("Break and Continue")
+    for (num in 1..100) {
+        if (num % 3 == 0 && num % 5 == 0) {
+            println("First positive no divisible by both 3 and 5: ${num}")
+            break
+        }
+    }
+
+    //Skip to the next iteration of a loop using the continue keyword
+    for (num in 1..10) {
+        if (num%2 == 0) {
+            continue;
+        }
+        print("${num} ")
+    }
+
+
 
 }
