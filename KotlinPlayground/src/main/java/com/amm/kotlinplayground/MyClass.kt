@@ -4,7 +4,8 @@ import java.util.*
 
 fun main(){
     //Variables()
-    Operators()
+    //Operators()
+    IfAndWhen()
 }
 
 fun Variables(){
@@ -246,4 +247,148 @@ fun Operators(){
     numbers[1]= 12
     println("numbers[1]=12")
     println("numbers= " + Arrays.toString(numbers)) //Al poner esta sentencia nos invita a inportar la librería Arrays
+}
+
+fun IfAndWhen(){
+    println("\n----------------------------------")
+    println("Loops and Branching")
+    println("----------------------------------")
+
+    //If expression
+    println("\n----------------------------------")
+    println("If expression")
+    var a=10
+    var b=8
+    var x: Int
+    var max: Int
+
+    max = a
+    if (a < b) max = b
+
+    // With else
+    if (a > b) {
+        max = a
+    } else {
+        max = b
+    }
+
+    // As expression
+    max = if (a > b) a else b
+    println(max)
+
+    //If Else Chain
+    println("\n----------------------------------")
+    println("If Else Chain")
+    var age = 17
+    if(age < 12) {
+        println("Child")
+    } else if (age in 12..17) {
+        println("Teen")
+    } else if (age in 18..21) {
+        println("Young Adult")
+    } else if (age in 22..30) {
+        println("Adult")
+    } else if (age in 30..50) {
+        println("Middle Aged")
+    } else {
+        println("Old")
+    }
+
+    //When expression
+    println("\n----------------------------------")
+    println("When expression")
+    x=1
+    when (x) {
+        1 -> print("x == 1")
+        2 -> print("x == 2")
+        else -> {
+            print("x is neither 1 nor 2")
+        }
+    }
+
+    println("\n----------------------------------")
+    println("When expression")
+    var dayOfWeek = 4
+    when(dayOfWeek) {
+        1 -> println("Monday")
+        2 -> println("Tuesday")
+        3 -> println("Wednesday")
+        4 -> println("Thursday")
+        5 -> println("Friday")
+        6 -> println("Saturday")
+        7 -> println("Sunday")
+        else -> println("Invalid Day")
+    }
+
+    //Multiple statements per block
+    println("\n----------------------------------")
+    println("Multiple statements per block")
+    when(dayOfWeek) {
+        1 -> {
+            // Block
+            println("Monday")
+            println("First day of the week")
+        }
+        7 -> println("Sunday")
+        else -> println("Other days")
+    }
+
+    //Using When as expression
+    println("\n----------------------------------")
+    println("Using When as expression")
+    var dayOfWeekInString = when(dayOfWeek) {
+        1 -> "Monday"
+        2 -> "Tuesday"
+        3 -> "Wednesday"
+        4 -> "Thursday"
+        5 -> "Friday"
+        6 -> "Saturday"
+        7 -> "Sunday"
+        else -> "Invalid Day"
+    }
+
+    println("Today is $dayOfWeekInString")	// Today is Thursday
+
+    //Combining multiple when branches into one using comma
+    println("\n----------------------------------")
+    println("Combining multiple when branches into one using comma")
+    dayOfWeek = 6
+    when(dayOfWeek) {
+        1, 2, 3, 4, 5 -> println("Weekday")
+        6, 7 -> println("Weekend")
+        else -> println("Invalid Day")
+    }
+
+    //Checking whether a given value is in a range or not using in operator
+    println("\n----------------------------------")
+    println("Checking whether a given value is in a range or not using in operator")
+    var dayOfMonth = 5
+    when(dayOfMonth) {
+        in 1..7 -> println("We're in the first Week of the Month")
+        !in 15..21 -> println("We're not in the third week of the Month")
+        else -> println("none of the above")
+    }
+
+    //Checking whether a given variable is of certain type or not using is operator
+    println("\n----------------------------------")
+    println("Checking whether a given variable is of certain type or not using is operator")
+    var y : Any = 6.86  //Any define x que puede ser de cualquier tipo.
+    when(y) {
+        is Int -> println("$y is an Int")
+        is String -> println("$y is a String")
+        !is Double -> println("$y is not Double")
+        else -> println("none of the above")
+    }
+
+    //Using when as a replacement for an if-else-if chain
+    println("\n----------------------------------")
+    println("Using when as a replacement for an if-else-if chain")
+    var number = 20
+    when {
+        number < 0 -> println("$number is less than zero")
+        number % 2 == 0 -> println("$number is even")
+        number > 100 -> println("$number is greater than 100")
+        else -> println("None of the above")
+    }
+
 }
