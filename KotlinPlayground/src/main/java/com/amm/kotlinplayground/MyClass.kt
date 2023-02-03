@@ -6,7 +6,8 @@ fun main(){
     //Variables()
     //Operators()
     //IfAndWhen()
-    Loops()
+    //Loops()
+    Functions()
 }
 
 fun Variables(){
@@ -477,4 +478,76 @@ fun Loops(){
 
 
 
+}
+
+//Functions------------------------------------
+fun Functions(){
+    println("\n----------------------------------")
+    println("MultiplesOf")
+
+    MultiplesOf(1,100,2) //Llamamos sin poner el nombre del parámetro
+    MultiplesOf(first=6, last = 60, multipleOf = 3) //LLamamos poniendo el nombre del parametro
+    //LLamamos a la que tiene parametros por defecto
+
+    println("\n----------------------------------")
+    println("Multiples")
+    Multiples(5,10,2)
+    Multiples(last=60)  //Podemos obviar los que tienen valor por defecto.
+    Multiples(last=10, multipleOf=3, first=4)  //Si ponemos los nombres podemos cambiar el orden
+    Multiples(first=100, multipleOf=2, last=50)  //Que pasa aqui?
+
+    println("\n----------------------------------")
+    println("CalculateCatAge")
+    var catAge = CalculateCatAge(7)
+    println("Cat age is $catAge")
+
+    println("\n----------------------------------")
+    println("CalcCatAge")
+    //Usamos la de sintaxis corta
+    println("Cat age is " + CalcCatAge(8))  //Concatenamos la llamada a la funcion
+
+
+    println("\n----------------------------------")
+    println("OverTrheshold")
+    var value=0
+    while (!overThreshold(value)){
+        println("$value -> under or at threshold")
+        value++
+    }
+    println("With $value we are over threshold")
+
+}
+
+//Multiplos de un número entre dos numeros
+fun MultiplesOf(first:Int, last:Int, multipleOf:Int){
+    println("----------------------------------")
+    println("first=$first, last=$last number=$multipleOf")
+    for (i in first..last){
+        if (i%multipleOf==0){
+            println("$i is multiple of $multipleOf")
+        }
+    }
+}
+
+fun Multiples(first:Int=1, last:Int, multipleOf:Int=2){ //Parametros por defecto
+    println("----------------------------------")
+    println("first=$first, last=$last number=$multipleOf")
+    for (i in first..last){
+        if (i%multipleOf==0){
+            println("$i is multiple of $multipleOf")
+        }
+    }
+}
+
+fun CalculateCatAge(age:Int): Int {  // en tiempo humano son 7 años por cada año del gato Retorna : Int
+    val catAge = age * 7
+    //println("This cat is $catAge years old")
+    return catAge
+}
+
+fun CalcCatAge(age:Int):Int = age * 7  //Definimos la función con sintaxis corta
+
+//Retorno Booleano
+fun overThreshold(value:Int):Boolean{
+    return value>14
 }
