@@ -3,13 +3,13 @@ package com.amm.kotlinplayground
 import java.util.*
 
 fun main(){
-    //variables()
+    variables()
     //Operators()
     //IfAndWhen()
     //Loops()
     //Functions()
     //Lambdas()
-    Destructuring()
+    //Destructuring()
 }
 
 fun variables(){
@@ -638,6 +638,22 @@ fun Lambdas(){
     //y el body en lineas separadas.
 
     println("\n----------------------------------")
+    println("Otro trailing lambda")
+    //La función enhancedMessage está definida abajo y tiene una función como último parámetro.
+    //esa función devuelve un entero.
+    //La llamamos aquí con la sintaxis del trailing lambda
+    enhancedMessage("Esto es un mensaje"){
+        //Un simple 12 que es la última instrucción del lambda, por lo que el retorno es 12
+        12
+    }
+    enhancedMessage("Esto es otro mensaje"){
+        //ahora pasamos la función suma que recibe dos enteros y que devuelve un Int.
+        sumaLambda(3,4)
+    }
+
+
+
+    println("\n----------------------------------")
     println("Más lambdas as functions arguments")
     languages.forEach { println(it) }
     // Aplicamos funciones encadenadas al array de lambdas.
@@ -832,6 +848,12 @@ fun processLanguages(languages: List<String>, action: (String) -> Unit) {
     //Entonces forEach pasará a este action los elementos de la lista de uno en uno, y el lambda hará su trabajo.
     //Que cada vez que llamen a processLanguages puede ser una acción diferente, un lambda diferente.
     languages.forEach(action)
+}
+
+fun enhancedMessage(message:String, funAsParameter: ()-> Int){
+    println(message)
+    println("y el resultado de la función es:")
+    println(funAsParameter())
 }
 
 fun Destructuring(){
