@@ -3,14 +3,16 @@ package com.amm.kotlinplayground
 import java.util.*
 
 fun main(){
-    //Variables()
+    //variables()
     //Operators()
     //IfAndWhen()
     //Loops()
-    Functions()
+    //Functions()
+    //Lambdas()
+    Destructuring()
 }
 
-fun Variables(){
+fun variables(){
     // Kotlin var an val keywords
     //---------------------------------------------------
     var name="Kotlin" //mutable
@@ -510,7 +512,7 @@ fun Functions(){
     println("\n----------------------------------")
     println("OverTrheshold")
     var value=0
-    while (!overThreshold(value)){
+    while (!OverThreshold(value)){
         println("$value -> under or at threshold")
         value++
     }
@@ -548,6 +550,363 @@ fun CalculateCatAge(age:Int): Int {  // en tiempo humano son 7 años por cada a�
 fun CalcCatAge(age:Int):Int = age * 7  //Definimos la función con sintaxis corta
 
 //Retorno Booleano
-fun overThreshold(value:Int):Boolean{
+fun OverThreshold(value:Int):Boolean{
     return value>14
+}
+
+//Lambdas ---------------------------------------------
+fun Lambdas(){
+    println("\n----------------------------------")
+    println("Hello Lambdas")
+    val lambda1 = { println("Hello Lambdas") }
+    println(lambda1)
+
+    println("\n----------------------------------")
+    println("Función suma normal")
+    SumaNormal(2,5)
+
+    println("\n----------------------------------")
+    println("Función suma con Lambda")
+    //Creamos la Lambda, pero la asignamos a una variable, esa variable es una función ahora.
+    val sumaLambda: (Int, Int) -> Int = { a, b -> a+b}
+    //La usamos.
+    println(sumaLambda(3,4))
+
+    println("\n----------------------------------")
+    println("CatAge con Lambda")
+    //Transformar la función CalulateCatAge como una Lambda
+    val catAge: (Int) -> Int = {age -> age*7}
+    println(catAge(7))
+
+    println("\n----------------------------------")
+    println("Using it as parameter")
+    //Como tenemos un único parámetro podemos sustituir su uso por it
+    val theCatAge: (Int) -> Int = {
+        it *7
+    }
+    println(theCatAge(8))
+
+    println("\n----------------------------------")
+    println("Lambdas functions that returns Unit")
+    //La función siguiente no devuelve nada
+    fun showName(name:String){
+        println(name)
+    }
+    //Si la convertimos en una expresión lambda tendremos que poner Unit como tipo de retorno
+    val theName: (String) -> Unit = {println("Hola, mi nombre es $it")}
+    println(theName("Miguel"))
+
+    val lambda2 : (String) -> Unit = { name: String ->
+        println("My name is $name")
+    }
+    println(lambda2("Miguel"))
+
+    println("\n----------------------------------")
+    println("Lambdas as functions arguments")
+
+    //La funcción   processLanguages esta definida fuera (abajo), echarle un vistazo.
+    //Es una función que recibe un lambda en su parametro action:
+    //Ese lambda recibe un parametro String y devuelve Unit
+
+    //Creamos una lista de lenguajes de programación
+    val languages = listOf("Kotlin", "Java", "Swift", "Dart", "Rust")
+    //Creamos un lambda para pasarselo como parametro a la función processLanguages
+    val action = { language: String -> println("Hello $language") }
+    //LLamamos a processLanguaes con el action definido
+    processLanguages(languages, action)
+    //Creamos otro lambda y otra forma de construirla
+    val action2: (String) -> Unit = {  print("[$it]")}
+    //Y volvemos a llamar a la función
+    processLanguages(languages, action2)
+
+    //Pero podemos pasar la definición de la lambda justo cuando llamamos a la función
+    //sin necesidad de almacenarla en una variable
+    println("\n... pasando la definción en la llamada")
+    processLanguages(languages, {language:String -> print("[ $language ]") } )
+
+    //Pero esta forma de llamara a la función es un poco enrevesada de leer
+    //En este caso el cuerpo de la lambda es corto y puede verse, pero si es mas largo se complica la lectura del código.
+    //Por eso Kotlin ha definido la sintaxis especial Trailing Lambda que se puede aplicar
+    //cuando la lambda es el último parámetro en la llamada a una función.
+    //Usando la sintaxis Trailing Lambda, la lambda se puede poner fuera de la llamada a la función.
+    println()
+    processLanguages(languages) { language ->
+        println("--> $language")
+    }
+    //Vemos como parece que processLanguages tenga sólo un parámetro, pero realmente tiene 2,
+    //el segundo y último es un lambda que sacamos fuera de los paréntesis, ponemos sus parametros
+    //y el body en lineas separadas.
+
+    println("\n----------------------------------")
+    println("Más lambdas as functions arguments")
+    languages.forEach { println(it) }
+    // Aplicamos funciones encadenadas al array de lambdas.
+    // Es decir, primero seleccionamos los que empiezan por K, luego lo pasamos a minúsculas y todos ellos los imprimimos
+    languages
+        .filter { it.startsWith("K")}
+        //La siguiente llamada tiene tela, la función replaceFirstChar (que suplanta a .capitalize())
+            // también tiene un trailing lambda, su it recibe la primera letra y a esta le aplica un lowercase
+        .map { it.replaceFirstChar { it.lowercase()} }
+        .forEach { println(it) }
+
+    //Lo mismo se vería de esta forma si no existiese la sintaxis trailing lambda
+    println("\nSin la sintaxis trailing lambda")
+    languages.forEach({ println(it) })
+    languages
+        .filter({ it.startsWith("K")})
+        .map({ it.capitalize() }) //Fijaros que aquí capitalize lo marca como deprecated y nos aconseja el uso de replaceFirstChar
+        .forEach({ println(it) })
+
+
+    //EJERCICIO: ***********************************************************
+    //Hacer hacer lo mismo pero para todos los lenguajes que tienen una 'a' en su nombre
+    println("\nLenguajes que contienen una a")
+    //**********************************************************************
+
+    println("\n----------------------------------")
+    println("Todavía más lambdas as functions arguments")
+    // create a filtered list of even values
+    // Se llama a la función filter de una lista.
+    // la función filter es llamada para cada elmento de la lista
+    // Si nos fijamos en el prototipo de la función filter (poner el ratón encima)
+    // vemos que recibe un parametro llamado predicate: que es una función lambda
+    // que recibe un parametro de tipo T (el de los elementos de la lista) y devuelve un Booleano
+    // filter devuelve una lista con los elemntos que cumplen el booleano calculado en la lambda
+    val vals = listOf(1, 2, 3, 4, 5, 6).filter( predicate =  { num ->
+        num.mod(2) == 0
+    })
+    println(vals)
+
+    println("\n----------------------------------")
+    println("Omitimos el nombre del parametro si es el único")
+
+    val vals2 = listOf(1, 2, 3, 4, 5, 6).filter( { num ->
+        num.mod(2) == 0
+    })
+    println(vals2)
+
+    //Nos alerta el editor que podemos sacar el lambda fuera del paréntesis
+    //Esto es la sintaxis Trailing Lambda
+
+    //Quitamos por tanto incluso los paréntesis que se usan para pasar los parametros a las funciones.
+    val vals3 = listOf(1, 2, 3, 4, 5, 6).filter  { num ->
+        num.mod(2) == 0
+    }
+    print(vals3)
+
+    println("\n----------------------------------")
+    println("Repasando  ... ")
+    println("Simple Lambdas")
+    // Una lambda sin parámetros que no devuelve nada se asigna a una variable.
+    // La ultima expresion del cuerpo del lambda es lo que se devuelve.
+    // Como println no devuelve nada por eso nuestra lambda devuelve Unit
+    val simpleLambda : () -> Unit = { println("Hello") }
+
+    //Para llamarla como una función hay que ponerle los paréntesis.
+    print(simpleLambda())
+
+    // Como simpleLamba no tiene parámetros y el valor de retorno se puede inferir del cuerpo del lambda
+    // se puede simplificar más
+    val simpleLambda2 = {println("Hola simpleLambda2")}
+    // vemos que hemos quitado los dos puntos y pasamos directamente al igual, sino nos pide el tipo
+    println(simpleLambda2)
+
+
+    println("\n----------------------------------")
+    println("Formas de simplificar un lambda")
+    val lambdaOriginal : (String, String) -> String = { first: String, last: String ->
+        "My name is $first $last"
+    }
+
+    //Primera simplificación. Omitimos la declaración de tipos pero definimos el tipo de cada parametro
+    val lambdaSimplificado1 = { first: String, last: String ->
+        "My name is $first $last"
+    }
+
+    val lambdaSimplificado2 : (String, String) -> String = { first, last ->
+        "My name is $first $last"
+    }
+
+    println(lambdaOriginal("Miguel", "Martínez"))
+    println(lambdaSimplificado1("Miguel", "Martínez"))
+    println(lambdaSimplificado2("Miguel", "Martínez"))
+
+    println("\n----------------------------------")
+    println("Invocando un Lambda")
+    val saludo = { greeting: String, name: String ->
+        println("$greeting $name")
+    }
+
+    saludo("Hello", "Kotlin")
+    saludo.invoke("Hello", "Kotlin")
+
+    println("\n----------------------------------")
+    println("Devolviendo (multiples) valores desde un lambda")
+    println("Qualified Returns")
+    //In a normal function, if we wanted to return early, we could add a return that would return out
+    //of the function before it ran to completion.
+    //However, with lambda expressions, adding a return in this way results in a compiler error.
+    // - Quitar los comentarios para ver que el compilador me pone un error.
+//    val lambdaError = { greeting: String, name: String ->
+//        if(greeting.length < 3) return // error: return not allowed here
+//
+//        println("$greeting $name")
+//    }
+
+    //To accomplish the desired result, we must use what is referred to as a qualified return.
+    val lambdaQualified: (String, String) -> Unit = greet@{ greeting: String, name: String ->
+        if(greeting.length < 3) return@greet
+
+        println("$greeting $name")
+    }
+    //To accomplish the desired result, we must use what is referred to as a qualified return.
+    val lambdaQualifiedSimplified = greet@{ greeting: String, name: String ->
+        if(greeting.length < 3) return@greet
+
+        println("$greeting $name")
+    }
+    //Hemos etiquetado nuestro lambda con la etiqueta greet@
+    //Cuando queremos terminar podemos usar return@greet  (return at greet)
+    //En este caso nuestro return anticipado no devuelve nada.
+    lambdaQualified("Hello","Kotlin")
+    println("La siguiente no devuelve nada porque Hi tiene menos de 3 letras.")
+    lambdaQualifiedSimplified("Hi","Kotlin")
+
+    // Las lambdas anteriornes no devuelven nada, que pasa si queremos devolver un string?
+    // La siguiente lambda devuelve un String, el caso base devuelvele la concatenación
+    // La devolución por etiqueta devuelve cadena vacía
+    val theLambdaString = greet@{ greeting: String, name: String ->
+        if(greeting.length < 3) return@greet ""
+
+        "$greeting $name"
+    }
+    println("Ahora la lambda devuelve un string")
+    println(theLambdaString("Hi","Miguel"))
+    //Cómo hacemos para concatenar el retorno de la función lamda?
+    //Suponer que quiero poner el string devuelto entre corchetes [String]
+    //Esta sentencia da error., descomentarlopara verlo
+    // println("[$theLambdaString("Hi","Miguel")]")
+    // Hay que usar las llaves para delmitar la función lambda en la interpolación de la variable.
+    println("Ahora la lambda devuelve un string que interpolamos dentro de corchetes")
+    println("[${theLambdaString("Hi","Miguel")}]")
+    println("... pero como devuelve la cadena vacía lo probamos con otro parámetro greeting")
+    println("[${theLambdaString("Hola","Miguel")}]")
+
+    //Extendemos la devolución a más de un caso no default
+    println("Ejemplo de multiples ")
+    val lambdaMultipleString = greet@ { greeting: String, name: String ->
+        if(greeting.length < 3) return@greet ""
+        if(greeting.length < 6) return@greet "Welcome !"
+
+        "$greeting $name !"
+    }
+    println("Return vacio : " + lambdaMultipleString("Hi","Miguel"))
+    println("Return Welcome:" +lambdaMultipleString("Hola","Miguel"))
+    println("Return Default:" + lambdaMultipleString("Welcome","Miguel"))
+
+    println("\n----------------------------------")
+    println("Accediendo al Lambda Clousure")
+    // Lambdas can access data and functions from outside their scope.
+    // This information from the outer scope is the lambda’s closure.
+    // The lambda can call functions, update variables, and use this information however it needs.
+    var currentStudentName: String? = null
+
+    val lambdaClousure = {
+        val nameToPrint = currentStudentName ?: "Our Favorite Student"
+        println("Welcome $nameToPrint")
+    }
+    lambdaClousure() // output: Welcome Our Favorite Student
+    currentStudentName = "Onofre"
+    lambdaClousure() // output: Welcome Nate
+}
+
+fun SumaNormal(x:Int, y:Int):Int{
+    return x+y
+}
+
+fun processLanguages(languages: List<String>, action: (String) -> Unit) {
+    //Recibe una lista de Strings (supuestos lenguajes de programación)
+    // y una función como lambda. Ese lambda recibe un string y devuelve nada (Unit)
+    //Sobre la lista de Strings llamamos a forEach pasándoles el parametro action,
+    //es decir el lambda que recbimos como parámetro.
+    //Entonces forEach pasará a este action los elementos de la lista de uno en uno, y el lambda hará su trabajo.
+    //Que cada vez que llamen a processLanguages puede ser una acción diferente, un lambda diferente.
+    languages.forEach(action)
+}
+
+fun Destructuring(){
+    println("\n----------------------------------")
+    println("Destructuring in Kotlin")
+
+    //Creamos una nueva Data Class, ver documentación de las DataClass. de momento la creamos.
+    data class Person(val id:Int, val name: String = "", val age: Int = 0)
+
+    val person1 = Person( 1, "Jon Snow", 20)
+    val (id, name, age) = person1
+    println(id)     //1
+    println(name)   //Jon Snow
+    println(age)    //20
+
+    //Internamente un objeto que puede desestructurarse tiene la función componentN() desde 1 hasta el que haga falta
+    val person2 = Person( 2, "Miguel", 32)
+    val id2 = person2.component1();
+    val name2 = person2.component2();
+    val age2 = person2.component3();
+
+    println("\n----------------------------------")
+    println("Destructuring as return values")
+    //Así se puede definir una función que devuelve un objeto Person
+    fun getPersonInfo(): Person { return Person(3, "Ned Stark", 45) }
+    //Pero también se puede definir así:
+    fun getOtherPersonInfo() = Person(3, "Ned Stark", 45)
+    //Desestructuramos el valor de retorno de la función.
+    val(id3, name3, age3) = getPersonInfo()
+    val(id4, name4, age4) = getOtherPersonInfo()
+    println("$id3, $name3, $age3")
+
+    println("\n----------------------------------")
+    println("Una función que devuelve un Pair (dos valores)")
+    fun twoValuesReturn(): Pair<Int, String> {
+        // ...
+        return Pair(1, "success")
+    }
+    //Desestructuramos el valor de retorno de la función.
+    val (result, status) = twoValuesReturn()
+    println("Result=$result Status=$status")
+
+    println("\n----------------------------------")
+    println("Usando to para crear el pair")
+    val lambdaPair: (Pair<String, Int>) -> Unit = { pair ->
+        println("key:${pair.first} - value:${pair.second}")
+    }
+    lambdaPair("id-123" to 5)
+
+    //Desestructuramos los parametros recibidos en los propios parametros del lambda
+    val lambdaPair2: (Pair<String, Int>) -> Unit = { (key, value) ->
+        println("key:$key - value:$value")
+    }
+    lambdaPair2("id-345" to 445)
+
+    println("\n----------------------------------")
+    println("Pasamos del id")
+    val (_, namep, agep) = person2
+    println("$namep, $agep")
+
+
+    println("\n----------------------------------")
+    println("Collections and For-Loops")
+    //El esquema de desestructuración de los elementos de una colección es:
+    //for ((a, b) in collection) { ... }
+    var map: HashMap<Int, Person> = HashMap()
+
+    map.put(1, person1)
+    map.put(2, person2)
+    map.put(3, Person(3,"Onofre", 32))
+
+    //En este mapa (clave/valor) la clave es el entero que hemos puesto, y el valor es un objeto persona
+    //Fijaros como se Interpola el objeto en el println.
+    for((key, value) in map){
+        println("Key: $key, Value: $value")
+    }
+
 }
