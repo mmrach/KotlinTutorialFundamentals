@@ -3,13 +3,13 @@ package com.amm.kotlinplayground
 import java.util.*
 
 fun main(){
-    variables()
-    //Operators()
-    //IfAndWhen()
-    //Loops()
-    //Functions()
-    //Lambdas()
-    //Destructuring()
+    //variables()
+    //operators()
+    //ifAndWhen()
+    //loops()
+    //functions()
+    //lambdas()
+    //destructuring()
 }
 
 fun variables(){
@@ -45,7 +45,7 @@ fun variables(){
     println("Hola mi nombre es $miNombre2 y tengo $age años")
 
     //-------------------
-    TiposNumericosBasicos()
+    tiposNumericosBasicos()
 
     val myByte: Byte
     myByte = -120 // -120   127   128 (error) -129 (error)
@@ -76,8 +76,8 @@ fun variables(){
     //-------------------------
     println("\n----------------------------------")
     println("Tipos Básicos")
-    TiposTextoBasicos()
-    TipoBoolean()
+    tiposTextoBasicos()
+    tipoBoolean()
 
     //Arrays
     println("\n----------------------------------")
@@ -85,11 +85,11 @@ fun variables(){
     val numbers: IntArray = intArrayOf(1, 2, 3, 4, 5)
     println("Value at 3rd position : " + numbers[2])
 
-    DataTypeConversion()
+    dataTypeConversion()
 
 }
 
-fun TiposNumericosBasicos(){
+fun tiposNumericosBasicos(){
     val a: Int = 10000
     val d: Double = 100.00
     val f: Float = 100.00f
@@ -105,7 +105,7 @@ fun TiposNumericosBasicos(){
     println("Byte Value is " + b)
 }
 
-fun TiposTextoBasicos(){
+fun tiposTextoBasicos(){
     val letter: Char    // defining a Char variable
     letter = 'A'        // Assigning a value to it
     println("$letter")
@@ -137,7 +137,7 @@ not have any escape sequence""";
 
 }
 
-fun TipoBoolean(){
+fun tipoBoolean(){
     val A: Boolean = true   // defining a variable with true value
     val B: Boolean = false   // defining a variable with false value
 
@@ -148,7 +148,7 @@ fun TipoBoolean(){
     val boolNull: Boolean? = null
 }
 
-fun DataTypeConversion(){
+fun dataTypeConversion(){
     val x: Int = 100
     //val y: Long = x  // Not valid assignment
     val y: Long = x.toLong()
@@ -158,7 +158,7 @@ fun DataTypeConversion(){
     println(y)
 }
 
-fun Operators(){
+fun operators(){
     println("\n----------------------------------")
     println("Operators")
 
@@ -487,32 +487,32 @@ fun Functions(){
     println("\n----------------------------------")
     println("MultiplesOf")
 
-    MultiplesOf(1,100,2) //Llamamos sin poner el nombre del parámetro
-    MultiplesOf(first=6, last = 60, multipleOf = 3) //LLamamos poniendo el nombre del parametro
+    multiplesOf(1,100,2) //Llamamos sin poner el nombre del parámetro
+    multiplesOf(first=6, last = 60, multipleOf = 3) //LLamamos poniendo el nombre del parametro
     //LLamamos a la que tiene parametros por defecto
 
     println("\n----------------------------------")
     println("Multiples")
-    Multiples(5,10,2)
-    Multiples(last=60)  //Podemos obviar los que tienen valor por defecto.
-    Multiples(last=10, multipleOf=3, first=4)  //Si ponemos los nombres podemos cambiar el orden
-    Multiples(first=100, multipleOf=2, last=50)  //Que pasa aqui?
+    multiples(5,10,2)
+    multiples(last=60)  //Podemos obviar los que tienen valor por defecto.
+    multiples(last=10, multipleOf=3, first=4)  //Si ponemos los nombres podemos cambiar el orden
+    multiples(first=100, multipleOf=2, last=50)  //Que pasa aqui?
 
     println("\n----------------------------------")
     println("CalculateCatAge")
-    var catAge = CalculateCatAge(7)
+    var catAge = calculateCatAge(7)
     println("Cat age is $catAge")
 
     println("\n----------------------------------")
     println("CalcCatAge")
     //Usamos la de sintaxis corta
-    println("Cat age is " + CalcCatAge(8))  //Concatenamos la llamada a la funcion
+    println("Cat age is " + calcCatAge(8))  //Concatenamos la llamada a la funcion
 
 
     println("\n----------------------------------")
     println("OverTrheshold")
     var value=0
-    while (!OverThreshold(value)){
+    while (!overThreshold(value)){
         println("$value -> under or at threshold")
         value++
     }
@@ -521,7 +521,7 @@ fun Functions(){
 }
 
 //Multiplos de un número entre dos numeros
-fun MultiplesOf(first:Int, last:Int, multipleOf:Int){
+fun multiplesOf(first:Int, last:Int, multipleOf:Int){
     println("----------------------------------")
     println("first=$first, last=$last number=$multipleOf")
     for (i in first..last){
@@ -531,7 +531,7 @@ fun MultiplesOf(first:Int, last:Int, multipleOf:Int){
     }
 }
 
-fun Multiples(first:Int=1, last:Int, multipleOf:Int=2){ //Parametros por defecto
+fun multiples(first:Int=1, last:Int, multipleOf:Int=2){ //Parametros por defecto
     println("----------------------------------")
     println("first=$first, last=$last number=$multipleOf")
     for (i in first..last){
@@ -541,21 +541,21 @@ fun Multiples(first:Int=1, last:Int, multipleOf:Int=2){ //Parametros por defecto
     }
 }
 
-fun CalculateCatAge(age:Int): Int {  // en tiempo humano son 7 años por cada año del gato Retorna : Int
+fun calculateCatAge(age:Int): Int {  // en tiempo humano son 7 años por cada año del gato Retorna : Int
     val catAge = age * 7
     //println("This cat is $catAge years old")
     return catAge
 }
 
-fun CalcCatAge(age:Int):Int = age * 7  //Definimos la función con sintaxis corta
+fun calcCatAge(age:Int):Int = age * 7  //Definimos la función con sintaxis corta
 
 //Retorno Booleano
-fun OverThreshold(value:Int):Boolean{
+fun overThreshold(value:Int):Boolean{
     return value>14
 }
 
 //Lambdas ---------------------------------------------
-fun Lambdas(){
+fun lambdas(){
     println("\n----------------------------------")
     println("Hello Lambdas")
     val lambda1 = { println("Hello Lambdas") }
@@ -563,7 +563,7 @@ fun Lambdas(){
 
     println("\n----------------------------------")
     println("Función suma normal")
-    SumaNormal(2,5)
+    sumaNormal(2,5)
 
     println("\n----------------------------------")
     println("Función suma con Lambda")
@@ -836,7 +836,7 @@ fun Lambdas(){
     lambdaClousure() // output: Welcome Nate
 }
 
-fun SumaNormal(x:Int, y:Int):Int{
+fun sumaNormal(x:Int, y:Int):Int{
     return x+y
 }
 
@@ -856,7 +856,7 @@ fun enhancedMessage(message:String, funAsParameter: ()-> Int){
     println(funAsParameter())
 }
 
-fun Destructuring(){
+fun destructuring(){
     println("\n----------------------------------")
     println("Destructuring in Kotlin")
 
