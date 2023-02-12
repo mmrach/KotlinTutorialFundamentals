@@ -2,6 +2,7 @@ package com.amm.kotlinplayground
 
 import java.util.*
 
+
 fun main(){
     //variables()
     //operators()
@@ -10,9 +11,11 @@ fun main(){
     //functions()
     //lambdas()
     //destructuring()
-    collections()
+    //collections()
+    clases()
 }
 
+//------- FUNCTIONS------------------
 fun variables(){
     // Kotlin var an val keywords
     //---------------------------------------------------
@@ -1176,4 +1179,207 @@ fun collections(){
     subList = myListOfNames.filter { it.contains('l', ignoreCase = true) }
     println(subList)
 
+}
+
+//--------------------------------------------------
+//CLASES
+//--------------------------------------------------
+fun clases(){
+    //Ir descomentando por versiones de clase.
+//    //v1----------------
+//    println("\nUsing BasicCar v1")
+//    println("----------------------")
+//
+//    val myCar = BasicCar()
+//    println(myCar) //imprime el codigo de objeto
+//    println(myCar.color)
+//    println(myCar.model)
+//    println("MyCar Info: color=${myCar.color} model=${myCar.model}")
+//
+//    //Como en v1 las variables son var las puedo cambiar fuera
+//    myCar.color="Rojo"
+//    myCar.drive();
+//    //usando la función Info.
+//    myCar.info()
+//
+//    //v2-------------------
+//    println("\nUsing BasicCar v2")
+//    println("----------------------")
+//
+//    val myCar = BasicCar("Verde", "Turbo WX")
+//    println(myCar) //imprime el codigo de objeto
+//    println(myCar.color)
+//    println(myCar.model)
+//    println("MyCar Info: color=${myCar.color} model=${myCar.model}")
+//
+//    //No nos deja modificar las variables val
+//    myCar.color="Rojo"
+//    //No me deja cambiar el modelo por ser val
+//    //myCar.model="XXTurbo"
+//    myCar.drive();
+//    //usando la función Info.
+//    myCar.info()
+
+//    //v3-------------------
+//    println("\nUsing BasicCar v3")
+//    println("----------------------")
+//
+//    //Declarar las variables en el constructor primario no ha cambiado
+//    //nada de su uso
+//    val myCar = BasicCar("Verde", "Turbo WX")
+//    println(myCar) //imprime el codigo de objeto
+//    println(myCar.color)
+//    println(myCar.model)
+//    println("MyCar Info: color=${myCar.color} model=${myCar.model}")
+//
+//    //No nos deja modificar las variables val
+//    myCar.color="Rojo"
+//    //No me deja cambiar el modelo por ser val
+//    //myCar.model="XXTurbo"
+//    myCar.drive();
+//    //usando la función Info.
+//    myCar.info()
+//
+//    val otherCar=BasicCar(color = "Negro", model = "jET")
+//    otherCar.info()
+
+//    //v4-------------------
+//    println("\nUsing BasicCar v4")
+//    println("----------------------")
+//
+//    //Declarar las variables en el constructor primario no ha cambiado
+//    //nada de su uso
+//    val myCar = BasicCar("Verde", "Turbo WX")
+//    println(myCar) //imprime el codigo de objeto
+//    println(myCar.color)
+//    println(myCar.model)
+//    println("MyCar Info: color=${myCar.color} model=${myCar.model}")
+//
+//    //No nos deja modificar las variables val
+//    myCar.color="Rojo"
+//    //No me deja cambiar el modelo por ser val
+//    //myCar.model="XXTurbo"
+//    myCar.drive();
+//    //usando la función Info.
+//    myCar.info()
+//
+//    //Llamamos al constructor secundario
+//    var otherCar=BasicCar(color = "Negro", model = "jET", petrolConsumption = 5.4f)
+//    otherCar.info()
+//
+//    //llamamos al constructor sin parametros,
+//    otherCar = BasicCar()
+//    otherCar.info()
+
+//    //v5-------------------
+//    println("\nUsing BasicCar v5")
+//    println("----------------------")
+//
+//    //Declarar las variables en el constructor primario no ha cambiado
+//    //nada de su uso
+//    val myCar = BasicCar("Verde", "Turbo WX")
+//    println(myCar) //imprime el codigo de objeto
+//    println(myCar.color)
+//    println(myCar.model)
+//    println("MyCar Info: color=${myCar.color} model=${myCar.model}")
+//
+//    //No nos deja modificar las variables val
+//    myCar.color="Rojo"
+//    //No me deja cambiar el modelo por ser val
+//    //myCar.model="XXTurbo"
+//    myCar.drive();
+//    //usando la función Info.
+//    myCar.info()
+//
+//    //Llamamos al constructor secundario
+//    var otherCar=BasicCar(color = "Negro", model = "jET", petrolConsumption = 5.4f)
+//    otherCar.info()
+
+//    println("\nUsing Car v1")
+//    println("----------------------")
+//    //Creando objetos
+//    var audi = Car()
+//    audi.info()
+//    var bmw = Car()
+//    bmw.info()
+//    var opel=Car()
+//    opel.info()
+
+//    println("\nUsing Car v2")
+//    println("----------------------")
+//    //Creando objetos
+//    var audi = Car("audi800",3406, 205.4)
+//    audi.info()
+//
+//    println("-----")
+//    var bmw = Car("BMW5",56, 302.1, petrolComsumtion = 10.5f)
+//    bmw.info()
+//
+//    println("-----")
+//    var renault = Car("R5",345, 127.8, color="Rojo")
+//    renault.info()
+//
+//    println("-----")
+//    var otro = Car(5)
+//    otro.info()
+//
+//    println("-----")
+//    otro.drive()
+//    otro.info()
+
+//    println("\nUsing Car v3 y DrivingClassCar")
+//    println("----------------------")
+//    //Herencia y sobrecarga
+//    //creamos una instancia de DrivingClassCar y vemos su info
+//    var dcCar=DrivingClassCar(model="Renault Clio")
+//    dcCar.info()
+//
+//    println("-----")
+//    dcCar.drive()
+//    dcCar.info()
+//
+//    println("-----")
+//    val otro=Car(5)
+//    otro.drive()
+//    otro.info()
+//
+//    println("-----")
+//    dcCar.drive(1.0)
+//    dcCar.info()
+
+//    println("\nDerived class initialization order")
+//    println("----------------------")
+//    //https://kotlinlang.org/docs/inheritance.html#derived-class-initialization-order
+//    println("Constructing the derived class(\"hello\", \"world\")")
+//    Derived("hello", "world")
+//
+//    println("\nCalling the superclass implementation FilledRectangle v1")
+//    println("----------------------")
+//    val fr = FilledRectangle()
+//    fr.draw()
+
+//    println("\nCalling the superclass implementation FilledRectangle v2")
+//    println("----------------------")
+//    val fr = FilledRectangle()
+//    fr.draw()
+
+//    println("\nNon Default Setters - Girl example")
+//    println("----------------------")
+//    val maria = Girl()
+//    maria.actualAge = 15
+//    maria.age = 15
+//    println("Maria: actual age = ${maria.actualAge}")
+//    println("Maria: pretended age = ${maria.age}")
+//
+//    val ana = Girl()
+//    ana.actualAge = 25
+//    ana.age = 25
+//    println("Ana: actual age = ${ana.actualAge}")
+//    println("Ana: pretended age = ${ana.age}")
+//
+//    val angela = Girl()
+//    angela.actualAge = 35
+//    angela.age = 35
+//    println("Angela: actual age = ${angela.actualAge}")
+//    println("Angela: pretended age = ${angela.age}")
 }
