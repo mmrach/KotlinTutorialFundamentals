@@ -10,6 +10,7 @@ fun main(){
     //functions()
     //lambdas()
     //destructuring()
+    collections()
 }
 
 fun variables(){
@@ -856,6 +857,7 @@ fun enhancedMessage(message:String, funAsParameter: ()-> Int){
     println(funAsParameter())
 }
 
+//Destructuring ---------------------------------------------
 fun destructuring(){
     println("\n----------------------------------")
     println("Destructuring in Kotlin")
@@ -930,5 +932,248 @@ fun destructuring(){
     for((key, value) in map){
         println("Key: $key, Value: $value")
     }
+
+}
+
+//Collections ---------------------------------------------
+fun collections(){
+    println("\n----------------------------------")
+    println("Collections in Kotlin. Overview")
+    println("----------------------------------")
+
+    // An example for immutable list
+    println("\n----------------------------------")
+    println("Inmutable listOf")
+    val immutableList = listOf("Pedro","Juan","Antonio")
+    // gives compile time error. No existe el método add
+    //immutableList.add = "Jesús"
+    for(item in immutableList){
+        println(item)
+    }
+
+    println("\n----------------------------------")
+    println("Inmutable set")
+    // Estamos inicializando con valores repetidos,
+    // el compilador nos deja, pero realmente no se añaden los repetidos
+    // ver la salida.
+    var immutableSet = setOf(6,9,9,0,0,"Miguel","Pedro","Pedro")
+    // gives compile time error. add no está definido.
+    //immutableSet.add(7)
+    for(item in immutableSet){
+        println(item)
+    }
+
+
+    println("\n----------------------------------")
+    println("Inmutable map")
+    var immutableMap = mapOf(9 to "Pedro",8 to "Antonio",7 to "Raul")
+    // gives compile time error
+    //immutableMap.put(9,"Praveen") //put no esta definido
+    //El bucle obtiene en key una clave distinta de la colección,
+    //itera hasta que se acaban los elementos de la colección
+    //dentro accede al elemento cuya clave ha recibido en la iteración.
+    for(key in immutableMap.keys){
+        println(immutableMap[key])
+    }
+    val cardinales = mapOf("Norte" to 12, "Sur" to 6, "Este" to 3, "Oeste" to 9)
+    println(cardinales)
+    cardinales.keys.forEach{println(it)}
+    cardinales.values.forEach{println(it)}
+    if ("Sur" in cardinales) println("Podemos ir al Sur pulsando ${cardinales["Sur"]}")
+    if (6 in cardinales.values) println("La tecla 6 permite movimiento")
+
+    println("\n----------------------------------")
+    println("Mutable list")
+
+
+    var mutableList = mutableListOf("Alberto","Nuria","Paola")
+    // we can modify the element
+    mutableList[0] = "María Pilar"
+    // add one more element in the list
+    mutableList.add("Carlota")
+    for(item in mutableList){
+        println(item)
+    }
+
+    println("\n----------------------------------")
+    println("Mutable set")
+    var mutableSet = mutableSetOf<Int>(6,10)
+    // adding elements in set
+    mutableSet.add(2)
+    mutableSet.add(5)
+    for(item in mutableSet){
+        println(item)
+    }
+    mutableSet.remove(10)
+    println("-----")
+    for(item in mutableSet){
+        println(item)
+    }
+    mutableSet.add(10)
+    println("-----")
+    for(item in mutableSet){
+        println(item)
+    }
+    println("----- adding 10 again")
+    mutableSet.add(10)
+    for(item in mutableSet){
+        println(item)
+    }
+
+    println("\n----------------------------------")
+    println("Mutable map")
+    var mutableMap = mutableMapOf<Int,String>(1 to "Juan",2 to "Nicolás",3 to "Ana")
+    // we can modify the element
+    mutableMap.put(1,"Juanito")
+    // add one more element in the list
+    mutableMap.put(4,"Anita")
+    for(item in mutableMap.values){
+        println(item)
+    }
+    val mutableCardinales= mutableMapOf("Norte" to 12, "Sur" to 6, "Este" to 3, "Oeste" to 9)
+    //Operador indice
+    mutableCardinales["SurEste"]=5
+    mutableCardinales["SurOste"]=7
+    println(mutableCardinales)
+
+    println("\n----------------------------------")
+    println("List of Names -> println")
+    val myListOfNames = listOf("Pedro", "Pablo", "Antonio", "Lucía", "Carmen")
+    println(myListOfNames)
+    println("En total ${myListOfNames.size}")
+
+    println("\n----------------------------------")
+    println("List of Names -> for loop")
+    for (name in myListOfNames){
+        println("Nombre: $name")
+    }
+
+    println("\n----------------------------------")
+    println("List of Names -> .foreach")
+    myListOfNames.forEach(){
+        println("Nombre $it")
+    }
+    println("-----")
+    //trailing lambda.
+    myListOfNames.forEach {
+        println("Nombre $it")
+    }
+    println("-----")
+    //trailing lambda + named parameter
+    myListOfNames.forEach {nombre:String->
+        println("Nombre $nombre")
+    }
+
+    println("\n----------------------------------")
+    println("MyMutableList adding and removing")
+    val myMutableList=mutableListOf(12,45,683,23,12)
+    myMutableList.add(0,0)
+    myMutableList.forEach{println(it)}
+    println("-----")
+    myMutableList.add(1,1)
+    myMutableList.forEach{println(it)}
+    println("-----")
+    myMutableList.add(100)
+    myMutableList.forEach{println(it)}
+    println("-----")
+    myMutableList.remove(683)
+    myMutableList.removeAt(3)
+    myMutableList.forEach{println(it)}
+
+    println("\n----------------------------------")
+    println("Invoking Methods on Lists")
+    myMutableList.forEach{println(it)}
+    println("En total hay : ${myMutableList.size} elementos")
+    //Kotlin nos avisa que podemos cambiar get por el operador indice
+    println("El segundo elmento es ${myMutableList.get(1)}")
+    println("El segundo elmento es ${myMutableList[1]}")
+    println("Find Index of First Occurrence of Element in List")
+    val list1 = listOf("ab", "bc", "cd", "de", "ef")
+    var element = "de"
+    val index = list1.indexOf(element)
+    list1.forEach{println(it)}
+    println("Index of element \"$element\" in the list is $index")
+
+    println("\n----------------------------------")
+    println("List.indexOf() to Check if \"$element\" is in List")
+    element="de"
+    if (list1.indexOf(element) > -1) {
+        print("$element is in list.")
+    } else {
+        print("$element is not in list.")
+    }
+    //Kotlin no tiene el operador ternario (expresion) ? valortrue : valor false
+    //Pero podemos usar:
+    val strResult = if (list1.indexOf(element)>-1)  "Esta" else  "No esta"
+    println("$element $strResult")
+
+    println("\n----------------------------------")
+    println("Inicializando Colecciones con cualquier tipo")
+    //queremos una lista mutable de strings
+    val miLista = mutableListOf<String>()
+    miLista.add("Uno")
+    miLista.add("Dos")
+    //Ahora metemos un bucle.
+    for (i in 1..10){
+        miLista.add("Dato $i")
+    }
+    println(miLista)
+
+    //Si queremos crearlos primero vacios....
+    val myList = mutableListOf<String>()
+    val mySet = mutableSetOf<Int>()
+    val myMap = mutableMapOf<String,Int>()
+
+    println("\n----------------------------------")
+    println("Filtrando colecciones")
+    println("----------------------------------")
+
+    println("\n----------------------------------")
+    println("Filtrando por valor")
+
+    val gHombre=0
+    val gMujer=1
+    val gOtro=2
+    val myMapOfNames = mutableMapOf(
+        "Miguel" to gHombre,
+        "Ana" to gMujer,
+        "Carlos" to gHombre,
+        "Alicia" to gMujer,
+        "Alba" to gMujer,
+        "Reme" to gMujer,
+        "Juan" to gOtro,
+    )
+    myMapOfNames.forEach{println(it.key)}
+    val hombres=myMapOfNames.filterValues { it==gHombre }
+    println("Chicos ${hombres.keys}")
+
+    println("\nBuscando en una lista")
+    println("----------------------------------")
+    println(myListOfNames)
+    var buscado="Antonio"
+    var encontrado = myListOfNames.filter {
+        it == buscado
+    }
+    println(encontrado)
+    if (encontrado.size > 0) println("$buscado esta") else println("$buscado no esta")
+
+    var found = myListOfNames.filter { it=="Miguel" }.size>0
+    if (found) println("Encontrado") else println("No Encontrado")
+
+    println("\nOtros filtros")
+    println("----------------------------------")
+    println(myListOfNames)
+    var subList = myListOfNames.filter {
+        !(it.endsWith('a') ||
+          it.endsWith('o'))
+    }
+    println("----")
+    println(subList.map { it.lowercase() })
+    println(subList)
+    println("----")
+    subList = myListOfNames.filter { it.startsWith('L',ignoreCase = true) }
+    println(subList)
+    subList = myListOfNames.filter { it.contains('l', ignoreCase = true) }
+    println(subList)
 
 }
