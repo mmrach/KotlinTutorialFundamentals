@@ -1,18 +1,22 @@
 package com.amm.kotlinplayground
 
 import java.util.*
+import kotlin.collections.HashMap
+
+//import java.util.*
 
 
 fun main(){
     //variables()
     //operators()
-    //ifAndWhen()
+    ifAndWhen()
     //loops()
     //functions()
     //lambdas()
     //destructuring()
     //collections()
-    clases()
+    //clases()
+    //interfaces()
 }
 
 //------- FUNCTIONS------------------
@@ -21,12 +25,11 @@ fun variables(){
     //---------------------------------------------------
     var name="Kotlin" //mutable
     val myName="Miguel" //inmutable
-    //Error   myName="Pepe"
-    print("Hello $name")
-    print("Cambiame de línea $name")
-    print("Hello $myName")
-
-//    return
+    //Error       myName="Pepe"
+    println(name)
+    println("Hello $name")
+    println("Cambiame de línea $name")
+    print("Hello \"$myName\"\n")
 
     //    Initializing variables
     //    ---------------------------------------------------
@@ -51,14 +54,15 @@ fun variables(){
     //-------------------
     tiposNumericosBasicos()
 
-    val myByte: Byte
+    var myByte: Byte
     myByte = -120 // -120   127   128 (error) -129 (error)
+    //myByte =-129
 
     val myShort: Short
     myShort = 32345
 
-//    println($myshort) // Error no está entre comillas.
     println(myShort)
+    //println(myshort") // Error no está entre comillas.
 
     //Long Values  'L'
     println("\n----------------------------------")
@@ -71,9 +75,9 @@ fun variables(){
     //Floating Type Numbers
     println("\n----------------------------------")
     println("Floating type numbers")
-    val piInt = 3.14159265359  //por defecto los números con decimales son  Double
+    val piDouble = 3.14159265359  //por defecto los números con decimales son  Double
     val myPif = 3.14159265359f //Warning de precisión
-    println(piInt)
+    println(piDouble)
     println(myPif)  //Salen menos decimales en consola. La precisión no es válida. Se redondea.
     //val myPif = 3.141592f //Ahora con f  o  F  es un Float
 
@@ -86,8 +90,13 @@ fun variables(){
     //Arrays
     println("\n----------------------------------")
     println("Arrays")
-    val numbers: IntArray = intArrayOf(1, 2, 3, 4, 5)
+    val numbers: IntArray = intArrayOf(1, 2, 3, 4, 5, 6, 7)
     println("Value at 3rd position : " + numbers[2])
+    var i:Int
+    for (i in 0..numbers.size-1){
+        println(numbers[i])
+    }
+    println(numbers.indices)
 
     dataTypeConversion()
 
@@ -95,8 +104,8 @@ fun variables(){
 
 fun tiposNumericosBasicos(){
     val a: Int = 10000
-    val d: Double = 100.00
-    val f: Float = 100.00f
+    val d: Double = 100.0
+    val f: Float = 100.0f
     val l: Long = 1000000004
     val s: Short = 10
     val b: Byte = 1
@@ -119,37 +128,42 @@ fun tiposTextoBasicos(){
     println("........................")
     print('\n') //prints a newline character
     println("........................")//Si usamos println serían dos saltos
+    println('\"') //prints a dollar $ character
     println('\$') //prints a dollar $ character
     println('\\') //prints a back slash \ character
 
     //Escaped Strings y Raw Strings
     val escapedString : String  = "I am escaped String!\n"
-    var rawString :String  = """This is going to be a
-multi-line string and will 
-not have any escape sequence""";
+    var rawString :String  = """
+This is going to be a (asdñlfklj j!!" d3 $ \ns
+multi-line string and will $escapedString
+not have any escape sequence"""
 
     print(escapedString)
     println(rawString)
 
     //Concatenación de Strings
-    val start = "Talk is cheap. "
-    val middle = "Show me the code. "
+    val start = "Talk is cheap."
+    val middle = "Show me the code."
     val end = "- Linus Torvalds"
 
     val result = start + middle + end
     println(result)
+    println(start + " " + middle + " "+ end);  println("$start $middle $end")
 
 }
 
 fun tipoBoolean(){
     val A: Boolean = true   // defining a variable with true value
     val B: Boolean = false   // defining a variable with false value
+    val C = true
 
-    println("Value of variable A "+ A )
-    println("Value of variable B "+ B )
+    println("Value of variable A " + A )
+    println("Value of variable B " + B )
 
     //Nullable Boolean   (cualquier tipo en realidad con ? detrás)
     val boolNull: Boolean? = null
+    println("Value of boolNull $boolNull")
 }
 
 fun dataTypeConversion(){
@@ -168,18 +182,38 @@ fun operators(){
 
     val a=23
     val b=12
-    print(a/b)  //Devuelve un valor entero. División entera.
+    println(a/b)  //Devuelve un valor entero. División entera.
 
     val c=23.0
     val d=12
     println(c/d)  //Devuelve un valor double. División float con que al menos uno sea double o float.
 
     //Módulo
-    val cociente=20
+    val cociente=21
     val divisor=2
 
     val resto = cociente % divisor
     println(" $cociente % $divisor = $resto" )
+
+    var miArray = arrayOf(1, 2 ,3, 4, 5)
+    println(miArray.size)
+//    var j:Int
+//    for (i in 0..9){
+//        j=i
+//        if (i>=5) {
+//            j = i - 5
+//        }
+//        miArray[j]+=2
+//    }
+    println("----------------------")
+
+    for (i in 0..9){
+        println("$i % 5 = " + i%5)
+        miArray[i%5]+=2
+    }
+    for (i in 0..miArray.size-1){
+        println(miArray[i])
+    }
 
     //Unary Oparators
     println("\n----------------------------------")
@@ -217,7 +251,7 @@ fun operators(){
         println("v is larger than w.")
         v
     } else {
-        println("v is larger than w.")
+        println("w is larger than v.")
         w
     }
 
@@ -242,10 +276,13 @@ fun operators(){
     var numbers = intArrayOf(1, 4, 42, -3)
     println(Arrays.toString(numbers)) //Al poner esta sentencia nos invita a inportar la librería Arrays
 
-    if (4 in numbers) {
+    if (6 in numbers) {
         println("numbers array contains 4.")
     }
+    else println("No esta")
 
+    val miString:String = Arrays.toString(numbers)
+    println(miString)
 
     //Index Access Operator
     println("\n----------------------------------")
@@ -257,7 +294,7 @@ fun operators(){
     println("numbers= " + Arrays.toString(numbers)) //Al poner esta sentencia nos invita a inportar la librería Arrays
 }
 
-fun IfAndWhen(){
+fun ifAndWhen(){
     println("\n----------------------------------")
     println("Loops and Branching")
     println("----------------------------------")
@@ -274,9 +311,8 @@ fun IfAndWhen(){
     if (a < b) max = b
 
     // With else
-    if (a > b) {
-        max = a
-    } else {
+    if (a > b)  max = a
+    else {
         max = b
     }
 
@@ -287,7 +323,7 @@ fun IfAndWhen(){
     //If Else Chain
     println("\n----------------------------------")
     println("If Else Chain")
-    var age = 17
+    var age = 65
     if(age < 12) {
         println("Child")
     } else if (age in 12..17) {
@@ -301,19 +337,19 @@ fun IfAndWhen(){
     } else {
         println("Old")
     }
-
     //When expression
     println("\n----------------------------------")
     println("When expression")
     x=1
     when (x) {
-        1 -> print("x == 1")
+        1 -> {
+            print("x == 1")
+        }
         2 -> print("x == 2")
         else -> {
             print("x is neither 1 nor 2")
         }
     }
-
     println("\n----------------------------------")
     println("When expression")
     var dayOfWeek = 4
@@ -327,7 +363,6 @@ fun IfAndWhen(){
         7 -> println("Sunday")
         else -> println("Invalid Day")
     }
-
     //Multiple statements per block
     println("\n----------------------------------")
     println("Multiple statements per block")
@@ -380,13 +415,20 @@ fun IfAndWhen(){
     //Checking whether a given variable is of certain type or not using is operator
     println("\n----------------------------------")
     println("Checking whether a given variable is of certain type or not using is operator")
-    var y : Any = 6.86  //Any define x que puede ser de cualquier tipo.
+    var y : Any = "Pepe" //Any define y que puede ser de cualquier tipo.
     when(y) {
         is Int -> println("$y is an Int")
         is String -> println("$y is a String")
-        !is Double -> println("$y is not Double")
+        is Double -> println("$y is Double")
         else -> println("none of the above")
     }
+    val miVariable= when(y) {
+        is Int -> "$y is an Int"
+        is String -> "$y is a String"
+        is Double -> "$y is Double"
+        else -> "none of the above"
+    }
+    println(miVariable)
 
     //Using when as a replacement for an if-else-if chain
     println("\n----------------------------------")
@@ -1382,4 +1424,8 @@ fun clases(){
 //    angela.age = 35
 //    println("Angela: actual age = ${angela.actualAge}")
 //    println("Angela: pretended age = ${angela.age}")
+}
+
+fun interfaces(){
+
 }
