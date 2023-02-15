@@ -9,7 +9,7 @@ import kotlin.collections.HashMap
 fun main(){
     //variables()
     //operators()
-    ifAndWhen()
+    //ifAndWhen()
     //loops()
     //functions()
     //lambdas()
@@ -17,6 +17,8 @@ fun main(){
     //collections()
     //clases()
     //interfaces()
+    //extensionFunctions()
+    dataClases()
 }
 
 //------- FUNCTIONS------------------
@@ -1426,6 +1428,175 @@ fun clases(){
 //    println("Angela: pretended age = ${angela.age}")
 }
 
-fun interfaces(){
+
+//--------------------------------------------------
+//INTERFACES
+//--------------------------------------------------
+
+class Button(val btnName:String):ClickEvent1{
+    override fun onClick(message: String) {
+        println("Clicked by $btnName, \"$message\"")
+    }
 
 }
+
+class Personaje(val name:String):ClickEvent1{
+    override fun onClick(message: String) {
+        println("Personaje: $name. \"$message\"")
+    }
+
+}
+
+class Avatar(val avName:String):ClickEvent2{
+    fun info(){
+        println("Soy $avName")
+    }
+}
+
+class Avatar2(override val nombre: String):ClickEvent3{
+    fun info(){
+        println("Soy $nombre")
+    }
+}
+
+fun interfaces(){
+    println("\nInterfaces")
+    println("----------------------")
+
+    val button = Button("Aceptar")
+    button.onClick("Ok, perfecto, acepto")
+    val superMario =Personaje("SuperMario")
+    superMario.onClick("Hiiiiii!!!!")
+
+    val correcaminos=Avatar("Correcaminos")
+    correcaminos.info()
+    correcaminos.onClick("Bip, Bip")
+
+    val coyote=Avatar2("Coyote")
+    coyote.onClick("Boom!")
+}
+
+//--------------------------------------------------
+//EXTENSIONS
+//--------------------------------------------------
+
+fun MutableList<Int>.swap(index1: Int, index2: Int) {
+    val tmp = this[index1] // 'this' corresponds to the list
+    this[index1] = this[index2]
+    this[index2] = tmp
+}
+//v1-------
+fun String.append(textToAppend:String): String{
+    return this.plus(textToAppend)
+}
+
+//v2 ------------
+fun String.mas(textToAppend: String):String = this.plus(textToAppend)
+
+fun String.removeFirstAndLast():String = this.substring(1,this.length-1)
+
+fun String.nl():String {
+    val bn= if (this.last()=='\n') "" else "\n"
+    return this.replaceFirstChar { it.uppercase() }.plus(bn)
+}
+
+fun extensionFunctions(){
+    println("\nExtension Functions")
+    println("----------------------")
+
+    println("\nAdding Swap")
+    println("----------------------")
+    val list = mutableListOf(1, 2, 3)
+    println(list)
+    list.swap(0, 2) // 'this' inside 'swap()' will hold the value of 'list'
+    println(list)
+
+    println("\nAppening to String ")
+    println("----------------------")
+    val saludo="Hola"
+    println(saludo.append(" Caracola"))
+
+    println(saludo.mas(" Miguel!"))
+
+    println("\nRemove first and last")
+    println("----------------------")
+    println("Hola caracola".removeFirstAndLast())
+
+    //EJERCICIO----
+    //Extensión que ponga en Mayúsculas el primer caracter de un string
+    // y que añada un \n si no lo tiene ya.
+    println("\nName with new Line")
+    println("----------------------")
+
+    print("Onofre")
+    println("----------")
+
+    print("Onofre".nl())
+    println("----------")
+
+    print("Miguel")
+    println("----------")
+
+    print("Miguel\n".nl())
+    println("----------")
+
+    val nombre="Miguel Onofre\n"
+    print(nombre.nl())
+    println("----------")
+
+
+    println("\nExtensiones ya existentes")
+    println("----------------------")
+
+    // One of the most popular ones is possibly the let() function,
+    // which can be called on any type in Kotlin
+    // let’s pass a function to it that will be executed on the initial value:
+    val name = "Miguel Onofre"
+    val uppercase = name
+        .let { n -> n.uppercase(Locale.getDefault()) }
+    println(uppercase)
+}
+
+//--------------------------------------------------
+//DATA CLASES
+//--------------------------------------------------
+
+data class Person(val name:String, val lastName:String, val age: Int)
+//No body
+
+fun dataClases() {
+    println("\nData Clases")
+    println("----------------------")
+
+    val admin = Person("Miguel Onofre", "Martínez", age=32)
+    println(admin)
+
+    val trainer = Person("Javier", "Ruiz", 45)
+    val tester = Person("Antonio", "del Monte",12)
+
+    println("\nStaf")
+    println("----------------------")
+    var staf = mutableListOf(admin,trainer,tester)
+    println(staf)
+    staf.forEach {
+        println("[${it.name},${it.lastName},${it.age}]")
+    }
+
+    println("\nStaf")
+    println("----------------------")
+    val otraPersona = admin
+    staf.add(otraPersona)
+    staf.forEach {
+        println("[${it.name},${it.lastName},${it.age}]")
+    }
+
+    println("\nStaf")
+    println("----------------------")
+    val otraMas = admin.copy(lastName = "Perez")
+    staf.add(otraMas)
+    staf.forEach {
+        println("[${it.name},${it.lastName},${it.age}]")
+    }
+}
+
+
