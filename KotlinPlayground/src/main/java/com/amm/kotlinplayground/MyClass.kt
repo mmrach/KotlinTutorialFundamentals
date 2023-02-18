@@ -1,5 +1,6 @@
 package com.amm.kotlinplayground
 
+import java.awt.geom.FlatteningPathIterator
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -18,7 +19,9 @@ fun main(){
     //clases()
     //interfaces()
     //extensionFunctions()
-    dataClases()
+    //dataClases()
+    //generics()
+    enums()
 }
 
 //------- FUNCTIONS------------------
@@ -445,7 +448,7 @@ fun ifAndWhen(){
 
 }
 
-fun Loops(){
+fun loops(){
     println("\n----------------------------------")
     println("Loops")
     println("----------------------------------")
@@ -462,7 +465,7 @@ fun Loops(){
     //do while loop
     println("\n----------------------------------")
     println("do while loop")
-    x = 1
+    x = 6
     do {
         print("$x ")
         x++
@@ -501,6 +504,10 @@ fun Loops(){
         println("PrimeNumber(${index+1}): ${primeNumbers[index]}")
     }
 
+    for(ix in 1..primeNumbers.size-1 ){
+        println("PrimeNumber(${ix+1}): ${primeNumbers[ix]}")
+    }
+
     //Foor Loop: Iterating through an array using withIndex()
     println("\n----------------------------------")
     println("Foor Loop: Iterating through an array using withIndex()")
@@ -531,10 +538,17 @@ fun Loops(){
 }
 
 //Functions------------------------------------
-fun Functions(){
+fun functions(){
     println("\n----------------------------------")
     println("MultiplesOf")
+    val a=3
+    multiplesOf(
+        a,
+        50,
+        3,
+    )
 
+    multiplesOf(multipleOf = 8, last = 30, )
     multiplesOf(1,100,2) //Llamamos sin poner el nombre del parámetro
     multiplesOf(first=6, last = 60, multipleOf = 3) //LLamamos poniendo el nombre del parametro
     //LLamamos a la que tiene parametros por defecto
@@ -569,7 +583,7 @@ fun Functions(){
 }
 
 //Multiplos de un número entre dos numeros
-fun multiplesOf(first:Int, last:Int, multipleOf:Int){
+fun multiplesOf(first:Int =1, last:Int, multipleOf:Int){
     println("----------------------------------")
     println("first=$first, last=$last number=$multipleOf")
     for (i in first..last){
@@ -595,23 +609,34 @@ fun calculateCatAge(age:Int): Int {  // en tiempo humano son 7 años por cada a�
     return catAge
 }
 
-fun calcCatAge(age:Int):Int = age * 7  //Definimos la función con sintaxis corta
+fun calcCatAge(age:Int):Int =  age * 7  //Definimos la función con sintaxis corta
 
 //Retorno Booleano
 fun overThreshold(value:Int):Boolean{
     return value>14
 }
 
+fun overThresh(value:Int):Boolean = value>14
+
+fun lambda2(){
+    println("Hello Lambdas")
+}
+
 //Lambdas ---------------------------------------------
 fun lambdas(){
     println("\n----------------------------------")
+    lambda2()
+
     println("Hello Lambdas")
     val lambda1 = { println("Hello Lambdas") }
+    lambda1
+
     println(lambda1)
 
     println("\n----------------------------------")
     println("Función suma normal")
-    sumaNormal(2,5)
+    println(sumaNormal(2,5))
+
 
     println("\n----------------------------------")
     println("Función suma con Lambda")
@@ -623,7 +648,8 @@ fun lambdas(){
     println("\n----------------------------------")
     println("CatAge con Lambda")
     //Transformar la función CalulateCatAge como una Lambda
-    val catAge: (Int) -> Int = {age -> age*7}
+    val catAge: (Int) -> Int = {
+        it*7}
     println(catAge(7))
 
     println("\n----------------------------------")
@@ -642,12 +668,12 @@ fun lambdas(){
     }
     //Si la convertimos en una expresión lambda tendremos que poner Unit como tipo de retorno
     val theName: (String) -> Unit = {println("Hola, mi nombre es $it")}
-    println(theName("Miguel"))
+    theName("Miguel")
 
     val lambda2 : (String) -> Unit = { name: String ->
         println("My name is $name")
     }
-    println(lambda2("Miguel"))
+    lambda2("Miguel")
 
     println("\n----------------------------------")
     println("Lambdas as functions arguments")
@@ -658,12 +684,15 @@ fun lambdas(){
 
     //Creamos una lista de lenguajes de programación
     val languages = listOf("Kotlin", "Java", "Swift", "Dart", "Rust")
+    println(languages)
     //Creamos un lambda para pasarselo como parametro a la función processLanguages
-    val action = { language: String -> println("Hello $language") }
+    val action = { language: String -> println("$language length =" +  "$language".length) }
     //LLamamos a processLanguaes con el action definido
     processLanguages(languages, action)
+
     //Creamos otro lambda y otra forma de construirla
     val action2: (String) -> Unit = {  print("[$it]")}
+
     //Y volvemos a llamar a la función
     processLanguages(languages, action2)
 
@@ -678,9 +707,11 @@ fun lambdas(){
     //cuando la lambda es el último parámetro en la llamada a una función.
     //Usando la sintaxis Trailing Lambda, la lambda se puede poner fuera de la llamada a la función.
     println()
+
     processLanguages(languages) { language ->
         println("--> $language")
     }
+
     //Vemos como parece que processLanguages tenga sólo un parámetro, pero realmente tiene 2,
     //el segundo y último es un lambda que sacamos fuera de los paréntesis, ponemos sus parametros
     //y el body en lineas separadas.
@@ -706,26 +737,35 @@ fun lambdas(){
     languages.forEach { println(it) }
     // Aplicamos funciones encadenadas al array de lambdas.
     // Es decir, primero seleccionamos los que empiezan por K, luego lo pasamos a minúsculas y todos ellos los imprimimos
+    println("-------")
     languages
         .filter { it.startsWith("K")}
         //La siguiente llamada tiene tela, la función replaceFirstChar (que suplanta a .capitalize())
             // también tiene un trailing lambda, su it recibe la primera letra y a esta le aplica un lowercase
         .map { it.replaceFirstChar { it.lowercase()} }
-        .forEach { println(it) }
-
+        .forEach {
+            println(it)
+        }
     //Lo mismo se vería de esta forma si no existiese la sintaxis trailing lambda
     println("\nSin la sintaxis trailing lambda")
     languages.forEach({ println(it) })
     languages
         .filter({ it.startsWith("K")})
-        .map({ it.capitalize() }) //Fijaros que aquí capitalize lo marca como deprecated y nos aconseja el uso de replaceFirstChar
+        .map({ it.replaceFirstChar { it.lowercase()}  }) //Fijaros que aquí capitalize lo marca como deprecated y nos aconseja el uso de replaceFirstChar
         .forEach({ println(it) })
 
 
     //EJERCICIO: ***********************************************************
     //Hacer hacer lo mismo pero para todos los lenguajes que tienen una 'a' en su nombre
     println("\nLenguajes que contienen una a")
-    //**********************************************************************
+    languages
+        .filter { it.contains('a') }
+        .forEach{ println(it)}
+
+    println(languages
+        .filter { it.contains('a') }
+    )
+     //**********************************************************************
 
     println("\n----------------------------------")
     println("Todavía más lambdas as functions arguments")
@@ -740,6 +780,7 @@ fun lambdas(){
         num.mod(2) == 0
     })
     println(vals)
+
 
     println("\n----------------------------------")
     println("Omitimos el nombre del parametro si es el único")
@@ -767,16 +808,15 @@ fun lambdas(){
     val simpleLambda : () -> Unit = { println("Hello") }
 
     //Para llamarla como una función hay que ponerle los paréntesis.
-    print(simpleLambda())
+    simpleLambda()
 
     // Como simpleLamba no tiene parámetros y el valor de retorno se puede inferir del cuerpo del lambda
     // se puede simplificar más
     val simpleLambda2 = {println("Hola simpleLambda2")}
     // vemos que hemos quitado los dos puntos y pasamos directamente al igual, sino nos pide el tipo
-    println(simpleLambda2)
+    simpleLambda2()
 
-
-    println("\n----------------------------------")
+        println("\n----------------------------------")
     println("Formas de simplificar un lambda")
     val lambdaOriginal : (String, String) -> String = { first: String, last: String ->
         "My name is $first $last"
@@ -1598,5 +1638,445 @@ fun dataClases() {
         println("[${it.name},${it.lastName},${it.age}]")
     }
 }
+
+//--------------------------------------------------
+//GENERICS
+//--------------------------------------------------
+//Creamos una clase para buscar en una lista de Strings
+class StringFinder(private val list: List<String>){
+    //La funcion recibe una función para aplicar al elemento encontrado
+    fun findItem(element:String, doWithFound: (element:String?) -> Unit ){
+        val itemFoundList = list.filter{
+            it==element
+        }
+        if (itemFoundList.isNullOrEmpty()) doWithFound(null)
+        else doWithFound(itemFoundList.first())
+    }
+}
+
+//EJERCICIO-------
+//class GenericFinder{}
+
+//EJERCICIO
+//class Stack<T>{}
+//Hacer una clase Stack para cualquier tipo de datos
+//val stack = Stack<T>()  //Se crea la pila vacía.
+//stack.push() //Añade en la pila un elemento T
+//stack.pop()  //Devuelve el ultimo elemento apilado T y lo elimina de la pila. Si vacia devuelve null
+//stqck.peek() //Devuelve el ultimo elemento apilado T pero no lo elimina de la pila. si vacia devuelve null
+//stack.print() //Si vacio imprime "Empty Stack"
+
+
+//---
+open class Mamifero(val animal: String){
+    open fun info(){
+        println("$animal: mamifero")
+    }
+}
+
+class Perro(val nombre:String, val raza:String):Mamifero("Perro"){
+    override fun info() {
+        super.info()
+        println("Nombre: $nombre, Raza: $raza")
+    }
+}
+
+class Gato(val nombre:String, val raza:String):Mamifero("Gato"){
+    override fun info() {
+        super.info()
+        println("Nombre: $nombre, Raza: $raza")
+    }
+}
+
+fun generics() {
+    println("\nGENERICS")
+    println("----------------------")
+
+    println("\nFinder con Strings")
+    println("----------------------")
+
+    val listOfStudents = listOf("Jorge", "Andres", "Paula", "Victoria", "Luis", "Miguel", "Natalia")
+    listOfStudents.forEach { println(it) }
+    println("------")
+
+    val finder = StringFinder(list = listOfStudents)
+    finder.findItem(""){
+        if (it.isNullOrEmpty()) println("No encontrado")
+        else println("Encontrado $it")
+    }
+    finder.findItem("Miguel"){
+        if (it.isNullOrEmpty()) println("No encontrado")
+        else println("Encontrado $it")
+    }
+
+    val listOfAges = listOf(3, 4, 5, 34, 0, 12)
+    //Esto da un error, la lista debe ser de Strings
+    //val myFinder = StringFinder(list=listOfAges)
+
+    val ageFinder= Finder(list = listOfAges)
+    val studentFinder = Finder(list = listOfStudents)
+
+    ageFinder.findItem(4){
+        if (it==null) println("No encontrado")
+        else println("Encontrado $it")
+    }
+
+    //EJERCICIO
+    //PERMITIR POR PARAMETRO BUSQUEDA no case Sensitive
+    println("-----")
+    studentFinder.findItem("victoria"){
+        if (it.isNullOrEmpty()) println("No encontrado")
+        else println("Encontrado $it")
+    }
+
+    studentFinder.findItem("victoria",false){
+        if (it.isNullOrEmpty()) println("No encontrado")
+        else println("Encontrado $it")
+    }
+
+    ageFinder.findItem(8){println("Found $it")}
+
+    data class Person(val name:String, val lastName:String, val age: Int)
+    //No body
+    val admin = Person("Miguel Onofre", "Martínez", age=32)
+    val trainer = Person("Javier", "Ruiz", 45)
+    val tester = Person("Antonio", "del Monte",12)
+
+    println("\nStaf")
+    println("----------------------")
+    var staf = mutableListOf(admin,trainer,tester)
+    staf.forEach {
+        println("[${it.name},${it.lastName},${it.age}]")
+    }
+
+    //Si nos fijamos el Finder no ponemos <T> ...
+    //El compilador infiere T del tipo de datos que gestiona la lista que se pasa.
+    //staf es una lista de objetos Person
+    val stafFinder=Finder(list=staf)
+    stafFinder.findItem(trainer){
+        println("Found ${it?.name}")
+    }
+
+    println("\nStack<Int>")
+    println("----------------------")
+    val myIntStack = Stack<Int>()
+    println(myIntStack.length)
+    myIntStack.print()
+    myIntStack.push(4)
+    myIntStack.push(5)
+    myIntStack.print()
+    println("Pop: ${myIntStack.pop()}")
+    println("Pop: ${myIntStack.pop()}")
+    myIntStack.print()
+
+    println("\nStack<String>")
+    println("----------------------")
+    val myStringStack = Stack<String>()
+    println(myStringStack.length)
+    myStringStack.print()
+    myStringStack.push("Miguel")
+    myStringStack.push("Ana")
+    myStringStack.print()
+    println("Pop: ${myStringStack.pop()}")
+    println("Cima Stack: ${myStringStack.peek()}")
+    println("Pop: ${myStringStack.pop()}")
+    println("Cima Stack: ${myStringStack.peek()}")
+    myStringStack.print()
+    if (myStringStack.isEmpty) println("No hay nombres")
+    else myStringStack.print()
+
+    println("\nVariance")
+    println("----------------------")
+    //Tenemos declaradas las clases Perro y Gato que heredan de Mamifero
+    //Queremos crear una mutableListOf(Mamiferos)
+    val perro1=Perro("Cuqui", raza = "Chiguagua");
+    val gato1=Gato(nombre="Mimi", raza="Persa")
+    val perro2=Perro(nombre = "Jonatan", raza = "Bretón Español")
+    perro1.info()
+    gato1.info()
+    perro2.info()
+
+    //Ahora quiero crear una lista con los animales que son mamiferos
+    val animals: MutableList<Mamifero> = mutableListOf()
+    animals.add(perro1)
+    animals.add(gato1)
+    animals.add(perro2)
+
+    //Y una lista con los animales que son Perros (que por su superclase sabemos que son mamiferos)
+    val perros: MutableList<Perro> = mutableListOf()
+    perros.add(perro1)
+    perros.add(perro2)
+    val mamifero: Mamifero = perros.first()
+
+    //Puedo crear una variable cuyo tipo de datos es Lista de Mamiferos y
+    //la inicializo con una variable que ees de ese tipo y tiene mamiferos de distintos tipos
+    val listaMamiferos :MutableList<Mamifero> = animals
+
+    println("\nCovariance")
+    println("----------------------")
+
+    //Ahora quiero crear una lista de Mamiferos e inicializar con la lista de perros
+    //Lo siguiente da error porque una Lista<Perros> es un tipo de datos no una clase
+    //por lo que no puede asignarla a una Lista de Mamiferos, que es un tipo de datos lista de Mamiferos
+    //Descomentar para ver como marca error en perros
+    //val listaAnimales2 :MutableList<Mamifero> = perros
+
+    // Para poder crear la variable debo indicar que se permite asignar listas
+    // cuyos elementos son de un tipo cuya superclase sea Mamifero
+    // out indica eso
+    val listaMamiferos2 : MutableList<out Mamifero> = perros
+    println(listaMamiferos2)
+}
+
+//--------------------------------------------------
+//ENUMS
+//--------------------------------------------------
+
+//Definimos una clase ENUM de tarjetas de crédito
+enum class CardType {
+    SILVER, GOLD, PLATINUM
+}
+//Y una clase Cliente donde se usa el CardType
+class Cliente_v1(private val nombre: String, private var tarjeta: CardType){
+    private var limiteCredito:Double = 0.0
+
+    init {
+        when (tarjeta){
+            CardType.SILVER -> limiteCredito=1000.0
+            CardType.GOLD -> limiteCredito=3000.0
+            CardType.PLATINUM -> limiteCredito=5000.0
+        }
+    }
+
+    fun tarjeta(): CardType {
+        return tarjeta
+    }
+
+    fun info(){
+        println("Cliente: $nombre, tarjeta: $tarjeta, límite: $limiteCredito")
+    }
+}
+
+//En kotlin los enum pueden tener atributos o propiedades
+enum class Color(val rgbVal: Int) {
+    RED(0xFF0000),
+    GREEN(0x00FF00),
+    BLUE(0x0000FF),
+    YELLOW(0xFFFF00),
+    BLACK(0x000000),
+    GRAY(0x808080)
+}
+
+//Mejoramos el enum de CardType para meterle el color.
+enum class CardTypes(val color: Color) {
+    SILVER(Color.GRAY),
+    GOLD(Color.YELLOW),
+    PLATINUM(Color.BLACK),
+}
+
+//Mejoramos por tanto la clase de Cliente
+class Cliente_v2(private val nombre: String, private var tarjeta: CardTypes){
+    private var limiteCredito:Double = 0.0
+    var color:Color? = null
+        private set
+
+    init {
+        when (tarjeta){
+            CardTypes.SILVER -> {
+                limiteCredito = 1000.0
+                color = tarjeta.color
+            }
+            CardTypes.GOLD -> limiteCredito=3000.0
+            CardTypes.PLATINUM -> limiteCredito=5000.0
+        }
+    }
+
+    fun tarjeta(): CardTypes {
+        return tarjeta
+    }
+
+    fun info(){
+        print("Cliente: $nombre,")
+        print("tarjeta: $tarjeta(${tarjeta.color}),")
+        println("límite: $limiteCredito, ")
+    }
+}
+
+//Mejoramos aun más el enum haciendo que tenga funciones
+enum class CardTypePlus(val color: Color) {
+    SILVER(Color.GRAY) {
+        //La funcion no tiene cuerpo porque solo hace return el numero.
+        override fun pctDescuento() = 0.25f
+    },
+    GOLD(Color.YELLOW) {
+        override fun pctDescuento() = 0.5f
+    },
+    PLATINUM(Color.BLACK) {
+        override fun pctDescuento() = 0.75f
+    };
+
+    abstract fun pctDescuento(): Float
+}
+
+//Mejoramos por tanto la clase de Cliente
+class Cliente_v3(private val nombre: String, private var tarjeta: CardTypePlus){
+    private var limiteCredito:Double = 0.0
+    var color:Color? = null
+        private set
+    var pctDescuento:Float = 0.0f
+        private set
+    init {
+        pctDescuento = tarjeta.pctDescuento()
+        when (tarjeta){
+            CardTypePlus.SILVER -> {
+                limiteCredito = 1000.0
+                color = tarjeta.color
+            }
+            CardTypePlus.GOLD -> limiteCredito=3000.0
+            CardTypePlus.PLATINUM -> limiteCredito=5000.0
+        }
+    }
+
+    fun tarjeta(): CardTypePlus {
+        return tarjeta
+    }
+
+    fun info(){
+        print("Cliente: $nombre,")
+        print("tarjeta: $tarjeta(${tarjeta.color}),")
+        println("límite: $limiteCredito, ")
+        println("Descuento ${pctDescuento*100}%")
+    }
+}
+
+//Mejoramos aun más la ENUM, haciendo que implemente una interfaz
+//en vez de sobercargando una funcion abstracta, queda mas limpio
+//Supongamos las siguiente interfaces
+interface IPctDescuento{
+    fun pctDescuento():Float
+}
+
+interface ILimiteCredito{
+    fun limiteCredito():Double
+}
+//Ahora la ENUM mejorada con estas dos
+enum class CardTypesPlus(val color: Color):IPctDescuento,ILimiteCredito {
+    SILVER(Color.GRAY) {
+        //La funcion no tiene cuerpo porque solo hace return el numero.
+        override fun pctDescuento() = 0.25f
+        override fun limiteCredito() = 1000.0
+    },
+    GOLD(Color.YELLOW) {
+        override fun pctDescuento() = 0.5f
+        override fun limiteCredito() = 3000.0
+    },
+    PLATINUM(Color.BLACK) {
+        override fun pctDescuento() = 0.75f
+        override fun limiteCredito() = 5000.0
+    };
+}
+
+//Ahora creamos la v4 de Cliente
+class Cliente_v4(private val nombre: String, private var tarjeta: CardTypesPlus){
+    var color:Color? = null
+        private set
+    init {
+        color = tarjeta.color
+    }
+
+    fun tarjeta(): CardTypesPlus {
+        return tarjeta
+    }
+
+    fun info(){
+        print("Cliente: $nombre,")
+        print("tarjeta: $tarjeta(${tarjeta.color}),")
+        println("límite: ${tarjeta.limiteCredito()}, ")
+        println("Descuento ${tarjeta.pctDescuento()*100}%")
+    }
+}
+
+
+fun enums(){
+    println("\nENUMS")
+    println("----------------------")
+
+    println("\nClientes v1")
+    println("----------------------")
+
+    //Creamos una lista de clientes
+    val clientes_v1 = mutableListOf(
+        Cliente_v1("Miguel", CardType.SILVER),
+        Cliente_v1("Ana", CardType.GOLD),
+        Cliente_v1("Lucia", CardType.PLATINUM),
+        Cliente_v1("Francisco", CardType.PLATINUM),
+    )
+    clientes_v1.add(Cliente_v1(nombre = "Juan", tarjeta = CardType.GOLD))
+    clientes_v1.forEach {
+        println("------------")
+        it.info()
+        when (it.tarjeta()){
+            CardType.SILVER -> println("Color tarjeta ${Color.GRAY}")
+            CardType.GOLD -> println("Color tarjeta ${Color.YELLOW}")
+            CardType.PLATINUM -> println("Color tarjeta ${Color.BLACK}")
+        }
+    }
+
+    println("\nClientes v2")
+    println("----------------------")
+
+    //Creamos una lista de clientes
+    val clientes_v2 = mutableListOf(
+        Cliente_v2("Miguel", CardTypes.SILVER),
+        Cliente_v2("Ana", CardTypes.GOLD),
+        Cliente_v2("Lucia", CardTypes.PLATINUM),
+        Cliente_v2("Francisco", CardTypes.PLATINUM),
+    )
+    clientes_v2.add(Cliente_v2(nombre = "Juan", tarjeta = CardTypes.GOLD))
+    clientes_v2.forEach {
+        println("------------")
+        it.info()
+        println("Color tarjeta: ${it.tarjeta().color}")
+        println("Color tarjeta: ${it.color}")
+    }
+
+    println("\nClientes v3")
+    println("----------------------")
+
+    //Creamos una lista de clientes
+    val clientes_v3 = mutableListOf(
+        Cliente_v3("Miguel", CardTypePlus.SILVER),
+        Cliente_v3("Ana", CardTypePlus.GOLD),
+        Cliente_v3("Lucia", CardTypePlus.PLATINUM),
+        Cliente_v3("Francisco", CardTypePlus.PLATINUM),
+    )
+    clientes_v3.add(Cliente_v3(nombre = "Juan", tarjeta = CardTypePlus.GOLD))
+    clientes_v3.forEach {
+        println("------------")
+        it.info()
+        println("Color tarjeta: ${it.tarjeta().color}")
+        println("Color tarjeta: ${it.color}")
+    }
+
+    println("\nClientes v4")
+    println("----------------------")
+
+    //Creamos una lista de clientes
+    val clientes_v4 = mutableListOf(
+        Cliente_v4("Miguel", CardTypesPlus.SILVER),
+        Cliente_v4("Ana", CardTypesPlus.GOLD),
+        Cliente_v4("Lucia", CardTypesPlus.PLATINUM),
+        Cliente_v4("Francisco", CardTypesPlus.PLATINUM),
+    )
+    clientes_v4.add(Cliente_v4(nombre = "Juan", tarjeta = CardTypesPlus.GOLD))
+    clientes_v4.forEach {
+        println("------------")
+        it.info()
+        println("Color tarjeta: ${it.tarjeta().color}")
+        println("Color tarjeta: ${it.color}")
+    }
+
+}
+
 
 
