@@ -1,14 +1,12 @@
 package com.amm.kotlinplayground
 
-import java.awt.geom.FlatteningPathIterator
+
 import java.util.*
 import kotlin.collections.HashMap
 
-//import java.util.*
-
 
 fun main(){
-    //variables()
+    variables()
     //operators()
     //ifAndWhen()
     //loops()
@@ -21,7 +19,10 @@ fun main(){
     //extensionFunctions()
     //dataClases()
     //generics()
-    enums()
+    //enums()
+    //enums2()
+    //abstracts()
+    //sealled()
 }
 
 //------- FUNCTIONS------------------
@@ -1996,7 +1997,6 @@ class Cliente_v4(private val nombre: String, private var tarjeta: CardTypesPlus)
     }
 }
 
-
 fun enums(){
     println("\nENUMS")
     println("----------------------")
@@ -2075,8 +2075,418 @@ fun enums(){
         println("Color tarjeta: ${it.tarjeta().color}")
         println("Color tarjeta: ${it.color}")
     }
-
 }
 
 
+//OTRO EJEMPLO CON ENUMS.
+//CREAREMOS UNA SIMULACION DE UN OBJETO REPOSITORIO
 
+//Partimos de una clase enum clásica
+enum class Result {
+    SUCCESS,
+    ERROR,
+    IDLE,
+    LOADING
+}
+
+//Creamos una Singleton Objet Repository que emulará un repositorio
+//que nos permitirá realizar operaciones (ficticias) con fuentes de datos.
+object Repository{
+    //Tenemos una variable para ver como va el estado de la carga
+    private var loadState: Result = Result.IDLE //se inicializa a ociosa.
+    //Tenemos una variable para almacenar el resultado de la carga
+    private var dataFetched:String? = null //Un string (simulando lo que sea)
+    // Una función que llamamos para simular que se descargan datos
+    // le pasamos un parametro para simular que pasa en esa descarga.
+    fun fetch(whatHappend:com.amm.kotlinplayground.Result){
+        loadState = Result.LOADING
+        println("  fetching…")
+        try {
+            // sleep for one second
+            Thread.sleep(1000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        when(whatHappend){
+            Result.SUCCESS ->{
+                loadState = Result.SUCCESS
+                dataFetched = "101010100100100100011101"
+            }
+            Result.ERROR ->{
+                loadState = Result.ERROR
+                dataFetched = null
+            }
+            Result.LOADING -> {
+                dataFetched = null
+            }
+        }
+    }
+    //Una funcion para pretuntar el estado actual.
+    fun getCurrentState():String{
+        return loadState.toString()
+    }
+    //Una funcion que llamaremos para simular que se para la recepción
+    //y volvemos a Idle
+    fun stopFetch(){
+        loadState=Result.IDLE
+        dataFetched=null
+    }
+    //Una funcion para obtener los datos descargados
+    fun getFetchedData():String?{
+        return dataFetched
+    }
+}
+
+//--------------------------------------------------
+//ABSTRACTS
+//--------------------------------------------------
+
+//Recordar que podemos pasar datos a cada enum, de esta forma.
+//Pero y si queremos que cada enum tenga datos de distintos tipos o mas de un dato
+enum class Result2(val data:String?) {
+    SUCCESS(data = "Los datos recibidos"),
+    ERROR(data = "El error producido"),
+    IDLE(data=null),
+    LOADING(data=null)
+}
+
+// El editor no detecta errores de compilacion y parece que podremos
+// asignar variables distintas a cada Enum value, pero si
+// compilamos nos da error de compilación. Eso no se pued hacar.
+// Tenemos que buscar otra manera.
+// Con clases abstractas primero y luego con clases selladas (sealled)
+// Descomentar lo siguente para ver lo dicho
+
+//enum class Result3{
+//    SUCCESS(val data:String = "Los datos recibidos"),
+//    ERROR(val exception: Exception ),
+//    IDLE(val data:String?=null),
+//    LOADING(val data:String?=null),
+//}
+//
+////Creamos el repositorio con sufijo 3 que usan Result3
+//object Repository3{
+//    //Tenemos una variable para ver como va el estado de la carga
+//    private var loadState: Result3 = Result3.IDLE //se inicializa a ociosa.
+//    //No nos hace falta la variable dataFetches pues la lleva el Success
+//    //private var dataFetched:String? = null //Un string (simulando lo que sea)
+//    // Una función que llamamos para simular que se descargan datos
+//    // le pasamos un parametro para simular que pasa en esa descarga.
+//    fun fetch(whatHappend:com.amm.kotlinplayground.Result3){
+//        loadState = Result3.LOADING
+//        println("  fetching…")
+//        try {
+//            // sleep for one second
+//            Thread.sleep(1000)
+//        } catch (e: InterruptedException) {
+//            e.printStackTrace()
+//        }
+//        when(whatHappend){
+//            Result3.SUCCESS ->{
+//                loadState = Result3.SUCCESS
+//                dataFetched = loadState.data
+//            }
+//            Result3.ERROR ->{
+//                loadState = Result.ERROR
+//                dataFetched = loadState.exception
+//            }
+//            Result3.LOADING -> {
+//                dataFetched = null
+//            }
+//        }
+//    }
+//    //Una funcion para pretuntar el estado actual.
+//    fun getCurrentState():String{
+//        return loadState.toString()
+//    }
+//    //Una funcion que llamaremos para simular que se para la recepción
+//    //y volvemos a Idle
+//    fun stopFetch(){
+//        loadState=Result3.IDLE
+//        dataFetched=null
+//    }
+//    //Una funcion para obtener los datos descargados
+//    fun getFetchedData():String?{
+//        return loadState.SUCCESS.data
+//    }
+//}
+
+//Declaramos una clase abstracta sin métodos ni propiedades.
+abstract class Result4
+//Ahora para cada uno de los enums, vamos a crear una data class que
+//hereda de la abstract class.
+// Es decir el Success es en si un dato, en este caso String
+// y el Error también es un dato pero de otro tipo, Exception
+data class Success(val dataFetched:String):Result4() //Sin parentesis da error de compilacion hay que llamar al constructor por defecto.
+data class Error(val exception: Exception):Result4()
+//Como para idle y loading no necesitamos datos podemos
+// crear objects que heredan de Result4 también
+object Idle:Result4()
+object Loading:Result4()
+
+//Creamos ahora el Repository4 de nuevo a ver si ahora va...
+object Repository4{
+    //Tenemos una variable para ver como va el estado de la carga
+    private var loadState: Result4 = Idle //se inicializa al objeto Idle
+    //Tenemos una variable para almacenar el resultado de la carga
+    private var dataFetched:String? = null //Un string (simulando lo que sea)
+    // Una función que llamamos para simular que se descargan datos
+    // le pasamos un parametro para simular que pasa en esa descarga.
+    fun fetch(whatHappend:com.amm.kotlinplayground.Result4){
+        loadState = Loading
+        println("  fetching…")
+        try {
+            // sleep for one second
+            Thread.sleep(1000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        when(whatHappend){
+            is Success ->{
+                loadState = whatHappend
+                dataFetched = whatHappend.dataFetched
+            }
+            is Error ->{
+                loadState = whatHappend
+                dataFetched = whatHappend.exception.toString()
+            }
+            is Loading -> {
+                dataFetched = null
+            }
+        }
+    }
+    //Una funcion para pretuntar el estado actual.
+    fun getCurrentState():String{
+        return when (loadState) {
+            is Loading -> "Loading..."
+            is Success -> "Success !"
+            is Error -> "Exception raised !"
+            is Idle -> "Idle"
+            //Esto lo tenemos que poner porque puede que haya mas objetos
+            //de tipo Result4 y el compilador nos obliga a curarnos en salud
+            //y que pongamos el return para cualquier otro objeto.
+            else -> {""} //Este else lo eliminaremos cuando sellemos la clase
+        }
+    }
+    //Una funcion que llamaremos para simular que se para la recepción
+    //y volvemos a Idle
+    fun stopFetch(){
+        loadState=Idle
+        dataFetched=null
+    }
+    //Una funcion para obtener los datos descargados
+    fun getFetchedData():String?{
+        return dataFetched
+    }
+}
+
+fun enums2() {
+    println("\nSimulacion 1")
+    println("----------------------")
+    var fetchedData: String?
+
+    //Simulamos trabajar con el repositorio
+    //Comenzamos una descarga y simulamos que sigue en ella
+    println("Descargando datos...")
+    Repository.fetch(Result.LOADING)
+    //Como sigue en ella al pedir el estado nos dará que está Loading
+    println("State: ${Repository.getCurrentState()}")
+    //Suponemos que termina con exito.
+    Repository.fetch(Result.SUCCESS)
+    //Como ha ido bien recogemos los datos
+    println("State: ${Repository.getCurrentState()}")
+    fetchedData = Repository.getFetchedData()
+    println("Recibido: $fetchedData")
+    //Simulamos que se cierra el canal
+    Repository.stopFetch()
+    println("State: ${Repository.getCurrentState()}")
+
+    println("\nSimulacion 2")
+    println("----------------------")
+    //Ahora simulamos que a mitad de la recepción da error
+    println("Descargando datos...")
+    Repository.fetch(Result.LOADING)
+    //Como sigue en ella al pedir el estado nos dará que está Loading
+    println("State: ${Repository.getCurrentState()}")
+    //Suponemos que termina con exito.
+    Repository.fetch(Result.ERROR)
+    //Como ha ido bien recogemos los datos
+    println("State: ${Repository.getCurrentState()}")
+    fetchedData = Repository.getFetchedData()
+    println("Recibido: $fetchedData")
+    //Simulamos que se cierra el canal
+    Repository.stopFetch()
+    println("State: ${Repository.getCurrentState()}")
+}
+
+fun abstracs(){
+    //Hemos visto como trabajamos con enums.
+    //Porqué nos proponemos usar clases abstractas en vez de enums?
+    //Podriamos usar Result2 como clase enum que tiene un parametro data
+    //Pero ese parametro será el mismo tipo para todos los enums
+    //Que pasa si quiero tener un String para SUCCESS, y una Exception para ERROR
+    //Ver Result3 (descomentarlo para ver que no compila)
+    //Haremos uso de las clases abstractas primero
+    //  Usaremos la abstract class Result4 (más arriba)
+    //Luego convertiremos en sealled clases
+    var fetchedData: String?
+
+    println("\nSimulacion 3")
+    println("----------------------")
+    //Simulamos trabajar con el repositorio4
+    //Comenzamos una descarga y simulamos que sigue en ella
+    println("Descargando datos...")
+    Repository4.fetch(Loading) //Le pasamos el objeto loading (antes era un enum, ahora un objeto)
+    //Como sigue en ella al pedir el estado nos dará que está Loading
+    println("State: ${Repository4.getCurrentState()}")
+    //Suponemos que termina con exito.
+    Repository4.fetch(Success("0111001001000001010")) //Le pasamos el exito con sus datos.
+    //Como ha ido bien recogemos los datos
+    println("State: ${Repository4.getCurrentState()}")
+    fetchedData = Repository4.getFetchedData()
+    println("Recibido: $fetchedData")
+    //Simulamos que se cierra el canal
+    Repository4.stopFetch()
+    println("State: ${Repository4.getCurrentState()}")
+
+    println("\nSimulacion 4")
+    println("----------------------")
+    //Ahora simulamos que a mitad de la recepción da error
+    println("Descargando datos...")
+    Repository4.fetch(Loading)
+    //Como sigue en ella al pedir el estado nos dará que está Loading
+    println("State: ${Repository4.getCurrentState()}")
+    //Suponemos que termina con exito.
+    Repository4.fetch(Error(exception = Exception("Ha ocurrido una excepción")))
+    //Como ha ido bien recogemos los datos
+    println("State: ${Repository4.getCurrentState()}")
+    fetchedData = Repository4.getFetchedData()
+    println("Recibido: $fetchedData")
+    //Simulamos que se cierra el canal
+    Repository4.stopFetch()
+    println("State: ${Repository4.getCurrentState()}")
+}
+
+//--------------------------------------------------
+//SEALLED
+//--------------------------------------------------
+
+//Declaramos una clase SEALLED sin métodos ni propiedades.
+sealed class Result5
+//Ahora para cada uno de los enums, vamos a crear una data class que
+//hereda de la abstract class.
+// Es decir el Success es en si un dato, en este caso String
+// y el Error también es un dato pero de otro tipo, Exception
+data class Success5(val dataFetched:String):Result5() //Sin parentesis da error de compilacion hay que llamar al constructor por defecto.
+data class Error5(val exception: Exception):Result5()
+//Como para idle y loading no necesitamos datos podemos
+// crear objects que heredan de Result4 también
+object Idle5:Result5()
+object Loading5:Result5()
+
+//Nuestra clase Repository5
+object Repository5{
+    //Tenemos una variable para ver como va el estado de la carga
+    private var loadState: Result5 = Idle5 //se inicializa al objeto Idle
+    //Tenemos una variable para almacenar el resultado de la carga
+    private var dataFetched:String? = null //Un string (simulando lo que sea)
+    // Una función que llamamos para simular que se descargan datos
+    // le pasamos un parametro para simular que pasa en esa descarga.
+    fun fetch(whatHappend:com.amm.kotlinplayground.Result5){
+        loadState = Loading5
+        println("  fetching…")
+        try {
+            // sleep for one second
+            Thread.sleep(1000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        when(whatHappend){
+            is Success5 ->{
+                loadState = whatHappend
+                dataFetched = whatHappend.dataFetched
+            }
+            is Error5 ->{
+                loadState = whatHappend
+                dataFetched = whatHappend.exception.toString()
+            }
+            is Loading5 -> {
+                dataFetched = null
+            }
+        }
+    }
+    //Una funcion para pretuntar el estado actual.
+    fun getCurrentState():String{
+        return when (loadState) {
+            is Loading5 -> "Loading..."
+            is Success5-> "Success !"
+            is Error5 -> "Exception raised !"
+            is Idle5 -> "Idle"
+            //Podemos quitar el else y el compilador no se queja.
+            //else -> {""} //Este else lo eliminaremos cuando sellemos la clase
+        }
+    }
+    //Una funcion que llamaremos para simular que se para la recepción
+    //y volvemos a Idle
+    fun stopFetch(){
+        loadState=Idle5
+        dataFetched=null
+    }
+    //Una funcion para obtener los datos descargados
+    fun getFetchedData():String?{
+        return dataFetched
+    }
+
+}
+
+fun sealled(){
+    //Para evitar tener la posibilidad de que extiendan nuestra clase
+    //o para saber que sólo tenemos un determinado numero de objetos
+    //y que no se van a poder crear mas, es decir, se definen en
+    // tiempo de compilación cuantos objetos de nuestra clase tenemos
+    //tendremos que sellar la clase, definirla como sealled en vez
+    //de abstract. Una clase sealled es tambien abstract, pero solo
+    //se pueden crear los objetos de ella que se definan en tiempo de
+    //compilación ni podrán extender la clase con funciones de extensión
+    //Crearemos la clase Results5 y Repository5, solo se diferenciará de la 4
+    //en que no tendremos necesidad de poner el else en los when pues el
+    //compilador sabe que no habrá más opciones (si las ponemos todas, claro)
+
+    var fetchedData: String?
+
+    println("\nSimulacion 5")
+    println("----------------------")
+    //Simulamos trabajar con el repositorio4
+    //Comenzamos una descarga y simulamos que sigue en ella
+    println("Descargando datos...")
+    Repository5.fetch(Loading5) //Le pasamos el objeto loading (antes era un enum, ahora un objeto)
+    //Como sigue en ella al pedir el estado nos dará que está Loading
+    println("State: ${Repository5.getCurrentState()}")
+    //Suponemos que termina con exito.
+    Repository5.fetch(Success5("0111001001000001010")) //Le pasamos el exito con sus datos.
+    //Como ha ido bien recogemos los datos
+    println("State: ${Repository5.getCurrentState()}")
+    fetchedData = Repository5.getFetchedData()
+    println("Recibido: $fetchedData")
+    //Simulamos que se cierra el canal
+    Repository5.stopFetch()
+    println("State: ${Repository5.getCurrentState()}")
+
+    println("\nSimulacion 6")
+    println("----------------------")
+    //Ahora simulamos que a mitad de la recepción da error
+    println("Descargando datos...")
+    Repository5.fetch(Loading5)
+    //Como sigue en ella al pedir el estado nos dará que está Loading
+    println("State: ${Repository5.getCurrentState()}")
+    //Suponemos que termina con exito.
+    Repository5.fetch(Error5(exception = Exception("Ha ocurrido una excepción")))
+    //Como ha ido bien recogemos los datos
+    println("State: ${Repository5.getCurrentState()}")
+    fetchedData = Repository5.getFetchedData()
+    println("Recibido: $fetchedData")
+    //Simulamos que se cierra el canal
+    Repository5.stopFetch()
+    println("State: ${Repository5.getCurrentState()}")
+
+}
